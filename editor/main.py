@@ -147,6 +147,13 @@ class MainWindow(QMainWindow):
                 shortcut='Del',
                 statusTip='Delete a item',
                 triggered=self.deleteItem)
+        self.runGraphAction = QAction(
+                QIcon('./images/run.png'),
+                '&Run graph file',
+                self,
+                shortcut='Shift+F10',
+                statusTip='Execute file',
+                triggered=self.runGraph)
         self.newGraphAction = QAction(
                 QIcon('./images/filenew.png'),
                 '&New graph',
@@ -506,6 +513,18 @@ class MainWindow(QMainWindow):
         else:
             print('canceled')
 
+    def runGraph(self):
+        """执行当前选中的文件"""
+        from A_Exporter import single_file_export
+        from crawler_graph.start import start
+
+        graphWidget = self.tabWidget.currentWidget()
+        if not isinstance(graphWidget, GraphWidget):
+            return
+        data = graphWidget.runGraph()
+        config_data = single_file_export(data)
+        start(config_data)
+
     def saveGraph(self):
         """
         保存当前选中的tab中的内容，到文件中
@@ -825,6 +844,7 @@ class MainWindow(QMainWindow):
     def createMenus(self):
         self.fileMenu = self.menuBar().addMenu('&File')
         self.fileMenu.addAction(self.newGraphAction)
+        self.fileMenu.addAction(self.runGraphAction)
         self.fileMenu.addSeparator()
         self.fileMenu.addAction(self.openGraphAction)
         self.fileMenu.addAction(self.openTemplateAction)

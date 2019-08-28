@@ -1,3 +1,7 @@
+import json
+import os
+
+
 class Value(object):
     def __init__(self):
         self.idx = None
@@ -288,7 +292,13 @@ def do_work(defData, editorData, filename):
     return ret
 
 
-def single_file_export(defData, editorData, filename):
+def single_file_export(editorData):
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    nodeDefFilepath = '/'.join([current_dir, 'meta/nodes.json'])
+
+    filename = os.path.basename(nodeDefFilepath).split('.')[0]
+    defData = json.loads(open(nodeDefFilepath, 'r').read())
+
     validate_def_data(defData)
     validate_editor_data(editorData)
 
@@ -297,17 +307,11 @@ def single_file_export(defData, editorData, filename):
 
 
 def convertFile(editorFilepath):
-    import os, sys
-    import json, traceback
-
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    nodeDefFilepath = '/'.join([current_dir, 'meta/nodes.json'])
-
-    defData = json.loads(open(nodeDefFilepath, 'r').read())
+    import traceback, sys
     editorData = json.loads(open(editorFilepath, 'r').read())
 
     try:
-        result = single_file_export(defData, editorData, os.path.basename(nodeDefFilepath).split('.')[0])
+        result = single_file_export(editorData)
     except Exception as e:
         traceback.print_exc(file=sys.stderr)
         return False

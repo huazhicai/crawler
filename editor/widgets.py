@@ -109,6 +109,11 @@ class GraphWidget(QWidget):
                                    filename=filename)
         self.updateEdit(False)
 
+    def runGraph(self):
+        controller = ControllerManager().getController(self.controllerKey)
+        data = controller.getData()
+        return data
+
     def saveGraph(self, filename):
         controller = ControllerManager().getController(self.controllerKey)
         controller.saveGraph(filename=filename)

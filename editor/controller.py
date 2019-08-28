@@ -284,7 +284,6 @@ class Controller(object):
         data['nodes'] = nodes_data
         data['edges'] = self.edges
         data['comments'] = comments_data
-
         return data
 
     def saveGraph(self, filename=''):
