@@ -47,7 +47,7 @@ logging.config.dictConfig({
             'level': logging.DEBUG,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
-            'stream' : 'ext://sys.stdout',
+            'stream': 'ext://sys.stdout',
         }
     },
     'loggers': {

@@ -6,8 +6,6 @@ import subprocess
 
 # from PyQt5.Qt import *
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QTabWidget, QMainWindow, QSizePolicy, QWidget, QHBoxLayout, QAction, QFileDialog, \
-    QApplication, QGraphicsScene, QToolButton, QButtonGroup, QComboBox
 
 from graphics import *
 from scene import DiagramScene
@@ -19,7 +17,7 @@ from dlg import ResizeSceneDialog, SaveQuestionDialog, OverrideDialog
 from mutil import simpleFileName
 import data
 import time
-from font import FontManager
+from fonts import FontManager
 from version import buildDate, version
 
 
@@ -31,7 +29,7 @@ class TabWidget(QTabWidget):
         super(TabWidget, self).__init__()
 
     def mouseDoubleClickEvent(self, event):
-        """鼠标双击事件"""
+        """鼠标双击事件,新建一个tab"""
         # 发射鼠标双击信号
         self.doubleClickSignal.emit()
 
@@ -107,7 +105,7 @@ class MainWindow(QMainWindow):
 
     def addTab(self, isTemplate=False):
         if not isTemplate:
-            tab = GraphWidget()
+            tab = GraphWidget()  # 父类标签控件对象
             # 编辑转态改变信号，连接槽函数，更新字幕
             tab.editStateChanged.connect(self.updateTabCaption)
             # 在视图上的鼠标位置更改信号，连接槽函数，更新鼠标位置
@@ -524,6 +522,7 @@ class MainWindow(QMainWindow):
         data = graphWidget.runGraph()
         config_data = single_file_export(data)
         start(config_data)
+        time.sleep(60)
 
     def saveGraph(self):
         """

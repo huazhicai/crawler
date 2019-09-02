@@ -134,10 +134,10 @@ class DiagramScene(QDMGraphicsScene):
                 action_id = category
                 action_name = data[category][0]
                 action = parentMenu.addAction(action_name)
-                action.triggered.connect(partial(self.chooseInsertItem,
-                                                 [action_name, action_id]))
+                action.triggered.connect(partial(self.chooseInsertItem, [action_name, action_id]))
 
     def contextMenuEvent(self, event):
+
         transform = QTransform(1, 0, 0, 0, 1, 0, 0, 0, 1)
         if self.itemAt(event.scenePos(), QTransform()):
             QGraphicsScene.contextMenuEvent(self, event)

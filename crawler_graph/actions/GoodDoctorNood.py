@@ -9,6 +9,25 @@ ccontact blacknepia@dingtail.com for more information
 from runtime.Action import Action
 from lxml import html
 import re
+import json
+
+"""
+好大夫独有节点
+"""
+#对网页unicode 数据进行筛选，选取需要数据
+
+class Unicode(Action):
+
+    def __call__(self, args, io):
+        con = args['con']
+        script = re.findall(r'.*?letArrive\((.*?)\);</script>', con)
+        contents = ""
+        for i in script:
+            need_con = json.loads(i)
+            content = need_con['content']
+            contents += content
+        io.set_output('Doc', contents)
+        io.push_event('Out')
 
 
 class DoctorsUrl(Action):
@@ -31,11 +50,9 @@ class DoctorsUrl(Action):
         for num in range(1,nums+1):
             DoctorsUrl = prefix + '/menzhen_'+ str(num) + '.htm'
             PagesList.append(DoctorsUrl)
-
         io.set_output('Result', PagesList)
         io.push_event('Out')
 
-#
 class ParseDate(Action):
     def __init__(self):
         self.am = {
@@ -53,18 +70,19 @@ class ParseDate(Action):
         tree = etree.HTML(page_source)
         infor_list = []
         for a in range(2, 9):
-            td_am = tree.xpath('//*[@id="doctortime"]/div[1]/table/tbody/tr[2]/td[%s]/img/@title' % a)
+            td_am = tree.xpath('//*[@id="doctortime"]/div[1]/table//tr[2]/td[%s]/img/@title' % a)
             if td_am:
                 times = self.am[a]
                 innfor = times + " " + td_am[0]
                 infor_list.append(innfor)
-            td_pm = tree.xpath('//*[@id="doctortime"]/div[1]/table/tbody/tr[3]/td[%s]/img/@title' % a)
+            td_pm = tree.xpath('//*[@id="doctortime"]/div[1]/table//tr[3]/td[%s]/img/@title' % a)
             if td_pm:
                 times = self.pm[a]
                 innfor = times + " " + td_pm[0]
                 infor_list.append(innfor)
 
         self.Date_dict["outpatient_info"] =','.join(infor_list)
+
         io.set_output('Result', self.Date_dict)
 
 #针对简历的不同 重些
@@ -105,6 +123,7 @@ class ParsePagesource_two(Action):
             result["resume"] = result.pop("resumes")
         else:
             del result['resumes']
-
+        if len(result["province"])==0:
+            print("啦啦啦啦啦啦啦")
         io.set_output('Result', result)
         io.push_event('Out')

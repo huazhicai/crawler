@@ -53,7 +53,8 @@ graph_config = {
         {
             'event_actions': {'In': 'InterceptionText'},
             'event_links':{'Out': {8: 'In'}},
-            'inputs': {'result': 9, 'rule': 10},
+            'inputs': {''
+                       '': 9, 'rule': 10},
             'outputs': {'doc_out':11}
         },
         {

@@ -11,6 +11,8 @@ def compatable(defType, value):
         return type(value) == float
     elif defType == 'Bool':
         return type(value) == bool
+    elif defType == 'Dict':
+        return type(value) == dict
     elif defType == 'String':
         return type(value) == str or type(value) == str
     elif defType == 'Vec3':

@@ -9,10 +9,13 @@ contact blacknepia@dingtail.com for more information
 from runtime.Action import Action
 import time
 
-#遍历列表获取每一个元素
+"""
+对列表进行遍历
+"""
 class IteratorList(Action):
 	def __call__(self, args, io):
 		for doc in args['doc_in']:
 			io.set_output('doc_out', doc)
 			io.push_event('Out')
+
 

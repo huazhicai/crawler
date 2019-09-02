@@ -16,18 +16,17 @@ from dlg import ErrorConsoleDialog, FindDialog, ReplaceDialog, ScriptModeDialog
 from functools import partial
 
 
-# 共用用一个导表工具
+# 共用一个导表工具
 sys.path.append(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir), 'csv2py'))
 from ActivityScriptExporter import editor_validate_and_export
 import logger
 
 
 class GraphWidget(QWidget):
-    """绘制图形场景"""
     editStateChanged = pyqtSignal()
 
     def __init__(self, parent=None):
-        super(GraphWidget, self).__init__(parent=parent)
+        super(GraphWidget, self).__init__(parent)
 
         self.editFlag = False  # 未在编辑转态
 
@@ -38,8 +37,8 @@ class GraphWidget(QWidget):
 
         # 创建图形场景对象，传递控制键参数
         self.scene = DiagramScene(self.controllerKey)
-        # self.scene.setSceneRect(QRectF(-self.sceneWidth / 2.0, -self.sceneHeight / 2.0,
-        #                                self.sceneWidth, self.sceneHeight))
+        self.scene.setSceneRect(QRectF(-self.sceneWidth / 2.0, -self.sceneHeight / 2.0,
+                                       self.sceneWidth, self.sceneHeight))
         # 将信号itemSelected连接到指定槽函数
         self.scene.itemSelected.connect(self.itemSelected)
         self.scene.resetModeSignal.connect(self.modeReseted)
@@ -48,7 +47,7 @@ class GraphWidget(QWidget):
         # 创建图形视口对象，传入图形场景作对象为参数
         self.view = DiagramView(self.scene)
         # self.view.setBackgroundBrush(QColor(230, 200, 167))
-        self.view.setBackgroundBrush(QColor(41, 41, 41))
+        # self.view.setBackgroundBrush(QColor(41, 41, 41))
         self.view.setMouseTracking(True)       # 视图鼠标跟踪
 
         # 创建水平布局管理器对象

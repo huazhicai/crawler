@@ -76,7 +76,6 @@ graph_config = {
             'inputs': {'Url': 18, },
             'outputs': {'Doc': 21}
         },
-
         {
             'event_actions': {'In': 'ParseUrl'},
             'event_links': {'Out': {12: 'In'}},
@@ -89,36 +88,58 @@ graph_config = {
             'inputs': {'Num': 23, 'Prefix': 24},
             'outputs': {'Url': 25}
         },
+
         {
-            'event_actions': {'In': 'SplashUrl'},
-            'event_links': {'Out': {14: 'In',15:'In'}},
-            'inputs': {'Url': 25, },
-            'outputs': {'Doc': 26}
+            'event_actions': {'In': 'RequestUrl_Charset'},
+            'event_links': {'Out': {14: 'In'}},
+            'inputs': {'Url': 25, 'Charset': 37},
+            'outputs': {'Doc': 38}
         },
+
+        {
+            'event_actions': {'In': 'Unicode'},
+            'event_links': {'Out': {15: 'In', 16: 'In'}},
+            'inputs': {'con': 38, },
+            'outputs': {'Doc': 39}
+        },
+
         {
             'event_actions': {'In': 'ParseDate'},
             'event_links': {},
-            'inputs': {'page_source': 26, },
+            'inputs': {'page_source': 39, },
             'outputs': {'Result': 29}
         },
 
         {
             'event_actions': {'In': 'ParsePagesource_two'},
-            'event_links': {'Out': {16: 'In'}},
-            'inputs': {'page_source': 26, 'Fields': 27,'Field': 31,},
+            'event_links': {'Out': {17: 'In'}},
+            'inputs': {'page_source': 39, 'Fields': 27, 'Field': 31, },
             'outputs': {'Result': 28}
         },
         {
             'event_actions': {'In': 'FieldMakeup'},
-            'event_links': {'Out': {17: 'In'}},
+            'event_links': {'Out': {18: 'In', }},
             'inputs': {'doc_in': 28, 'fields': 29},
             'outputs': {'doc_out': 30}
         },
+        {
+            'event_actions': {'In': 'AddDict'},
+            'event_links': {'Out': {19: 'In', 20:'In'}},
+            'inputs': {'key': 32, 'value': 25,'doc':30},
+            'outputs': {'doc_out': 33}
+        },
+
 
         {
             'event_actions': {'In': 'ConsoleOutput'},
             'event_links': {},
-            'inputs': {'result': 30},
+            'inputs': {'result': 33},
+            'outputs': {}
+        },
+        {
+            'event_actions': {'In': 'Mongodb'},
+            'event_links': {'Out':{}},
+            'inputs': {'url': 34, 'db': 35,'chart':36,'result':33},
             'outputs': {}
         },
 
@@ -152,25 +173,35 @@ graph_config = {
         None,  # 25
         None,  # 每个医生页面源代码
         {
-            'province'    : '//div[@class="luj"]/a[3]/text()',
-            'hospital'    : '//div[@class="luj"]/a[4]/text()',
-            'department'  : '//div[@class="luj"]/a[5]/text()',
-            'name'        : '//div[@class="luj"]/a[6]/text()',
-            'title'       : '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr//text()',
-            'special'     : '//*[@id="full_DoctorSpecialize"]/text()',
-            'resume'      : '//*[@id="full"]/text()',
-            # 'resumes'      : '//*[@id="bp_doctor_about"]/div/div[2]/div/table[1]/tr[5]/td[3]/text()',
+            'province': '//div[@class="luj"]/a[3]/text()',
+            'hospital': '//div[@class="luj"]/a[4]/text()',
+            'department': '//div[@class="luj"]/a[5]/text()',
+            'name': '//div[@class="luj"]/a[6]/text()',
+            'title': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr//text()',
+            'special': '//*[@id="full_DoctorSpecialize"]/text()',
+            'resume': '//*[@id="full"]/text()',
             'personal_web': '//div[@class="doctor-home-page clearfix"]/span[3]/a/text()'
         },
-        None,#28
-        None,#门诊信息
+        None,  # 28
+        None,  # 门诊信息
         None,
-        {   'resume_ss'      : '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr[5]/td[3]/text()',
-            'resume_s': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr[4]/td[3]/text()',
-            'judge': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr',
-            'titless': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr[3]/td[3]/text()',
-            'titles': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tbody/tr[2]/td[3]/text()',
-        },
+        {
+            'resume_ss': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tr[5]/td[3]/text()',
+            'resume_s': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tr[4]/td[3]/text()',
+            'judge': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tr',
+            'titless': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tr[3]/td[3]/text()',
+            'titles': '//div[@class="doctor_about"]/div[@class="middletr"][1]/div[@class="lt"]/table[1]/tr[2]/td[3]/text()',
+            },
+        'url_id',
+        None,#33
+        'mongodb://kidney:123456@10.0.30.202:27017',
+        'kidney',
+        'GoodDctor',#36
+        'gb2312',
+
+        None,
+        None,
+        None,
 
     ],
     'roots': [0]

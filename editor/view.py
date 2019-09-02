@@ -21,8 +21,8 @@ class DiagramView(QGraphicsView):
         self.moveFlag = False
 
         # 关闭垂直和水平方向的滚动条
-        # self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        # self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         # Qt::ScrollBarAlwaysOff
 
     def mousePressEvent(self, event):

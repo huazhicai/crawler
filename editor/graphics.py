@@ -8,7 +8,7 @@ from PyQt5.QtGui import QPen, QPainter, QPainterPath, QPolygonF, QPixmap, QColor
 from util import interpolate_cosine_points, editable_types, ItemType, ItemContent, Vec3
 from colors import ColorManager
 from dlg import ChangeValueDialog, TemplateDialog
-from font import FontManager, measureWidth
+from fonts import FontManager, measureWidth
 
 
 class LineBase(QGraphicsLineItem):
@@ -1088,8 +1088,9 @@ class DiagramItemInput(DiagramItemBase):
             self.scene().editSignal.emit()
 
             maxWidth = measureWidth(newTitleText)
-            while maxWidth > self.TitleWidth:
-                self.parentItem().wider()
+            # while maxWidth > self.TitleWidth:  # 固定大小
+                # maxWidth = 200
+            #     self.parentItem().wider()
         elif mode == 'reset':
             # 将 itemContent的值 设置为原有的默认值
             print('reset to default')

@@ -191,8 +191,9 @@ def generate_node_graph(defData, editorData):
                         assert validate_type(value.value, argType)
                     except:
                         raise TypeMismatchError(
-                            'validate_type error, argName "%s", type of (%s) is not %s, %s, def is %s' % (
-                                argName, value.value, argType, type(value.value), node.nodeDef), node.nodeID, argUUID)
+                                'validate_type error, argName "%s", type of (%s) is not %s, %s, def is %s' % (
+                                    argName, value.value, argType, type(value.value), node.nodeDef), node.nodeID,
+                                argUUID)
                     node.args[argUUID]['valueRef'] = value
                     node.args[argUUID]['dataProvider'] = node
 
@@ -277,6 +278,8 @@ def do_work(defData, editorData, filename):
         for value in node.preLinks.values():
             if value['links']:
                 prelinks[value['name']] = [node.funcs[key] for key in node.funcs][0]
+            else:
+                prelinks['Default'] = 'Start'
 
         nodes[node.idx] = {
             # 'preQueryNodes': preQueryNodes,
@@ -287,7 +290,8 @@ def do_work(defData, editorData, filename):
         }
     ret = {
         'nodes': nodes,
-        'runTimeData': runTimeData,
+        'runtime_data': runTimeData,
+        'roots': [0]
     }
     return ret
 
@@ -317,8 +321,14 @@ def convertFile(editorFilepath):
         return False
 
     parts = os.path.splitext(editorFilepath)
-    newFilename = parts[0] + '_new' + parts[1]
+    newFilename = parts[0] + '_new' + '.txt'
     with open(newFilename, 'w') as f:
-        json.dump(result, f, indent=4)
+        # json.dump(result, f, indent=4)
+        # f.write(result)
+        f.write(json.dumps(result, ensure_ascii=False, indent=2))
     return True
 
+
+if __name__ == '__main__':
+    editorFilepath = 'E:\\PycharmProjects\\crawler\\crawler\\editor\\graph\\temp.json'
+    convertFile(editorFilepath)

@@ -7,34 +7,41 @@ ccontact blacknepia@dingtail.com for more information
 """
 
 from runtime.Action import Action
+from fake_useragent import UserAgent
+from lxml import html
 import requests
 import time
 
-
+"""
+通过Splash Api接口 进行对页面js渲染，获取网页源代码
+"""
 class SplashUrl(Action):
     def __init__(self):
         self.splash_url = "http://10.0.30.10:8050//render.html"
+        self.headers = {
+            'User-Agent': ''}
     def __call__(self, args, io):
         url = args['Url']
+        headers = self.headers
+        headers['User-Agent'] = UserAgent().chrome
         print(url)
-        """
-        args参数说明：
-        url: 需要渲染的页面地址
-        timeout: 超时时间
-        proxy：代理
-        wait：等待渲染时间
-        images: 是否下载，默认1（下载）
-        js_source: 渲染页面前执行的js代码
-        """
-        args = {
+
+        argss = {
             "url": url,
             "timeout":7,
-            "wait":2,
+            'time':0.5
         }
-        re = requests.get(self.splash_url, params=args)
+        re = requests.get(self.splash_url, params=argss,headers=headers)
+        time.sleep(1)
+
         con = re.text
-        io.set_output('Doc', con)
-        io.push_event('Out')
+
+        if re.status_code == 200 and len(con) > 0:
+            io.set_output('Doc', con)
+            io.push_event('Out')
+        else:
+            self.__call__(args, io)
+
 
 
 

@@ -8,7 +8,7 @@ contact blacknepia@dingtail.com for more information
 
 from runtime.Action import Action
 
-#其实start 开始点
+
 class Start(Action):
 	def __call__(self, args, io):
 		io.push_event('Out')

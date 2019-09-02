@@ -9,10 +9,48 @@ contact blacknepia@dingtail.com for more information
 
 from runtime.Action import Action
 
+#向字典中添加键值对
+class AddDict(Action):
+	def __call__(self, args, io):
+
+		Key = args['key']
+		Value = args['value']
+		doc = args['doc']
+		doc[Key] = Value
+		io.set_output('doc_out', doc)
+		io.push_event('Out')
 
 
 
-#添加多余字段
+#字典相加
+class AddingDict(Action):
+	def __call__(self, args, io):
+		dict1 = args['dict1']
+		dict2 = args['dict2']
+
+
+		dictMerged1 = dict(dict1.items() + dict2.items())
+		io.set_output('doc_out', dictMerged1)
+		io.push_event('Out')
+
+
+
+#组成字典
+class JointDict(Action):
+	def __call__(self, args, io):
+		Key = args['key']
+		Value = args['value']
+		dict_url ={}
+		dict_url[Key] = Value
+		print(dict_url)
+		io.set_output('doc_out', dict_url)
+		io.push_event('Out')
+
+
+
+"""
+在原有字典中，添加键值对
+"""
 class FieldMakeup(Action):
 
 	def __call__(self, args, io):
@@ -23,15 +61,18 @@ class FieldMakeup(Action):
 		io.set_output('doc_out', doc)
 		io.push_event('Out')
 
-#将字典中链接列表提取 用于多个url时候
+"""
+将字典中的字典取出，返回字典中字典中的value
+"""
 class ContainerGetItem(Action):
 	def __call__(self, args, io):
 		doc = args['doc_in']
-# doc   为{'departments': ['web/ksindex/58.html', 'web/ksindex/50.html', 'web/ksindex
 		io.set_output('doc_out', doc[args['field']])
 		io.push_event('Out')
 
-#去除字典中value中的\xao \t \n,将字典中list转变str
+"""
+去除字典中value中的  \t \n,将value中list转变str
+"""
 class OperationList(Action):
 	def __call__(self, args, io):
 		doc = args['result']
@@ -42,7 +83,10 @@ class OperationList(Action):
 		io.set_output('doc_out', doc)
 		io.push_event('Out')
 
-#当信息为空时填补信息
+
+"""
+当dict中value为空时，补充信息
+"""
 class FillupInfor(Action):
 	def __call__(self, args, io):
 		doc = args['result']
@@ -53,7 +97,10 @@ class FillupInfor(Action):
 		io.push_event('Out')
 
 
-#如果多个字段在一个标签中，用正则截取想要的字段，对内容的提取
+
+"""
+如果多个字段在一个标签中，用正则截取多个字段，对内容的提取
+"""
 class InterceptionText(Action):
 	def __call__(self, args,io):
 		import re

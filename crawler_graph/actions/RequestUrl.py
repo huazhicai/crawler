@@ -7,25 +7,51 @@ ccontact blacknepia@dingtail.com for more information
 """
 
 from runtime.Action import Action
+from fake_useragent import UserAgent
 import requests
 import time
 
-
-class RequestUrl(Action):
+"""
+需要带encoding,发送reques请求
+"""
+class RequestUrl_Charset(Action):
     def __init__(self):
-
-
         self.headers = {
-           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
-        }
+           'User-Agent':''}
     def __call__(self, args, io):
         url = args['Url']
-        re = requests.get(url=url, headers=self.headers)
-        # time.sleep(1)
-        # Charset = args['Charset']
-        # re.encoding = Charset
+        print(url)
+        headers = self.headers
+        headers['User-Agent'] = UserAgent().chrome
+        re = requests.get(url=url, headers=headers)
+        time.sleep(1)
+
+        Charset = args['Charset']
+        re.encoding = Charset
         con = re.text
-        io.set_output('Doc', con)
-        io.push_event('Out')
+        if re.status_code == 200 and len(con)>0:
+            io.set_output('Doc', con)
+            io.push_event('Out')
+        else:
 
+            self.__call__(args, io)
 
+"""
+直接发送reques请求
+"""
+class RequestUrl(Action):
+    def __init__(self):
+        self.headers = {
+           'User-Agent':''}
+    def __call__(self, args, io):
+        url = args['Url']
+        headers = self.headers
+        headers['User-Agent'] = UserAgent().chrome
+        re = requests.get(url=url, headers=headers)
+        # time.sleep(1)
+        con = re.text
+        if re.status_code == 200 and len(con) > 0:
+            io.set_output('Doc', con)
+            io.push_event('Out')
+        else:
+            self.__call__(args, io)

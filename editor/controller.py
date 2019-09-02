@@ -288,7 +288,6 @@ class Controller(object):
 
     def saveGraph(self, filename=''):
         data = self.generateGraphData()
-
         self.attachMetaToData(data)
         with open('%s' % filename, 'w') as f:
             json.dump(data, f, indent=4)

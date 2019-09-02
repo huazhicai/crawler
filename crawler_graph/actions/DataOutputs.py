@@ -9,6 +9,7 @@ contact blacknepia@dingtail.com for more information
 """
 
 from runtime.Action import Action
+import pymongo
 
 #将result结果打印输出
 class ConsoleOutput(Action):
@@ -17,6 +18,28 @@ class ConsoleOutput(Action):
 
 
 		# pass
+
+
+class Mongodb(Action):
+
+
+	def __call__(self, args, io):
+
+		mongo_url = args['url']
+		mongo_db  = args['db']
+		mongo_chart = args['chart']
+		result = args['result']
+
+		remote_client = pymongo.MongoClient(mongo_url)
+		db = remote_client[mongo_db]
+		collection = db[mongo_chart]
+
+		collection.update_one({'url_id': result['url_id']}, {'$set': result}, True)
+
+
+
+
+
 
 class MongoOutput(Action):
 

@@ -136,7 +136,7 @@ def validate_def_data(defData):
                 print('Duplicate UUID !!! : ', uuid)
                 raise
 
-            # assert UUID(uuid, version=4)
+            assert UUID(uuid, version=4)
 
             uuidSet.add(uuid)
 

@@ -82,6 +82,7 @@ class ChangeValueDialog(QDialog):
         okButton.setDefault(True)
 
         layout = QGridLayout()
+        # row column 占用行数，占用列数
         layout.addWidget(typeLabel, 0, 0, 1, 1)
         layout.addWidget(typeInput, 0, 1, 1, 1)
         layout.addWidget(origLabel, 1, 0, 1, 1)

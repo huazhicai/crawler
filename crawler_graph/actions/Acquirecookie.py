@@ -4,7 +4,9 @@
 # created by LiQing.
 # created by LiQing
 # ccontact blacknepia@dingtail.com for more information
-# """
+"""
+通过selenium模拟登录获取cookie
+"""
 #
 # from runtime.Action import Action
 # import requests
