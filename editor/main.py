@@ -5,6 +5,8 @@ import os
 import subprocess
 
 # from PyQt5.Qt import *
+import threading
+
 from PyQt5.QtGui import QIcon
 
 from graphics import *
@@ -521,8 +523,10 @@ class MainWindow(QMainWindow):
             return
         data = graphWidget.runGraph()
         config_data = single_file_export(data)
-        start(config_data)
-        time.sleep(60)
+        # start(config_data)
+        t = threading.Thread(target=start, args=(config_data,))
+        t.start()
+        # time.sleep(60)
 
     def saveGraph(self):
         """

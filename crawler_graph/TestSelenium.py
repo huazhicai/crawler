@@ -1,64 +1,72 @@
-#-*- coding: utf-8 -*-
-"""
-copyright. AIIT
-created by LiQing.
-contact blacknepia@dingtail.com for more information
-"""
+import sys
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
-graph_config = {
-	#节点配置
-	'nodes' : [
-		{
-			'event_actions': {'Default': 'Start'},
-			'event_links': {'Out': {1: 'In'}},
-			'inputs': {},
-			'outputs': {}
-		},
+global sec
+sec = 0
 
-		{
-			'event_actions': {'In': 'SeleniumUrl'},
-			'event_links'  : {'Out': {2: 'In'}},
-			# 'event_links'  : {'Out': {2: 'In' , 3: 'In'}},
-			'inputs'       : {'Url': 0, 'Account':1,'Query':2},
-			'outputs'      : {'result':3 }
-		},
-		{
-			'event_actions': {'In': 'ConsoleOutput'},
-			'event_links'  : {},
-			'inputs'       : {'result':3},
-			'outputs'      : { }
-		},
 
-		# {
-		# 	'event_actions': {'In': 'ParsePagesource'},
-		# 	'event_links'  : {},
-		# 	'inputs'       : {'page_source':3, 'Fields':4},
-		# 	'outputs'      : { }
-		# },
-		#
-	],
-	'runtime_data': [
-		'http://chinackd.medidata.cn/login.jsp',
-		{'UserName' : 'demo3','PassWord' : 'tpqr6844'},
-		['AAAA','BBBBBB','CCCCCCCCCCC','DDDDDDDDDDDDDD'],
-		None,   #page_source网页源代码
-		# {
-		# 	#xpath解析规则
-		# 	'name'           : [],
-		# 	'title'          : [],
-		# 	'department'     : [],
-		# 	'special'        : [],
-		# 	'resume'         : [],
-		# 	'outpatient_info': []
-		# },
-	],
-	'roots': [0]
-}
+# 增加了一个继承自QThread类的类，重新写了它的run()函数
+# run()函数即是新线程需要执行的：执行一个循环；发送计算完成的信号。
+class WorkThread(QThread):
+    trigger = pyqtSignal()
 
-if __name__ == '__main__':
-	#第一步
-	from runtime.Runtime import GraphRunnerInstance
+    def __int__(self):
+        super(WorkThread, self).__init__()
 
-	instance = GraphRunnerInstance()
-	instance.run_graph(graph_config)
+    def run(self):
+        for i in range(3000000):
+            print(i)
 
+        # 循环完毕后发出信号
+        self.trigger.emit()
+
+
+def countTime():
+    global sec
+    sec += 1
+    # LED显示数字+1
+    lcdNumber.display(sec)
+
+
+def work():
+    # 计时器每秒计数
+    timer.start(1000)
+    # 计时开始
+    workThread.start()
+    # 当获得循环完毕的信号时，停止计数
+    workThread.trigger.connect(timeStop)
+
+
+def timeStop():
+    timer.stop()
+    print("运行结束用时", lcdNumber.value())
+    global sec
+    sec = 0
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    top = QWidget()
+    top.resize(300, 120)
+
+    # 垂直布局类QVBoxLayout
+    layout = QVBoxLayout(top)
+
+    # 加个显示屏
+    lcdNumber = QLCDNumber()
+    layout.addWidget(lcdNumber)
+    button = QPushButton("测试")
+    layout.addWidget(button)
+
+    timer = QTimer()
+    workThread = WorkThread()
+
+    button.clicked.connect(work)
+
+    # 每次计时结束，触发 countTime
+    timer.timeout.connect(countTime)
+
+    top.show()
+    sys.exit(app.exec_())
