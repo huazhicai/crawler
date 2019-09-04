@@ -19,25 +19,25 @@ import json
 class Unicode(Action):
 
     def __call__(self, args, io):
-        con = args['con']
+        con = args['text_str']
         script = re.findall(r'.*?letArrive\((.*?)\);</script>', con)
         contents = ""
         for i in script:
             need_con = json.loads(i)
             content = need_con['content']
             contents += content
-        io.set_output('Doc', contents)
+        io.set_output('result_str', contents)
         io.push_event('Out')
 
 
 class DoctorsUrl(Action):
     def __call__(self, args, io):
-        originalurl = args['originalurl']
-        page_source = args['page_source']
-        rule = args['rule']
+        originalurl = args['originalurl_str']
+        page_source = args['page_source_str']
+        rule = args['re_pattern_str']
         etree = html.etree
         tree = etree.HTML(page_source)
-        fields = args['Fields']
+        fields = args['xpath_str']
         urls = tree.xpath(fields)
         #页数为 len（urls）
         if len(urls)>0 :
@@ -50,8 +50,9 @@ class DoctorsUrl(Action):
         for num in range(1,nums+1):
             DoctorsUrl = prefix + '/menzhen_'+ str(num) + '.htm'
             PagesList.append(DoctorsUrl)
-        io.set_output('Result', PagesList)
+        io.set_output('url_list', PagesList)
         io.push_event('Out')
+
 
 class ParseDate(Action):
     def __init__(self):
@@ -65,7 +66,7 @@ class ParseDate(Action):
         }
         self.Date_dict={}
     def __call__(self, args, io):
-        page_source = args['page_source']
+        page_source = args['page_source_str']
         etree = html.etree
         tree = etree.HTML(page_source)
         infor_list = []
@@ -83,15 +84,17 @@ class ParseDate(Action):
 
         self.Date_dict["outpatient_info"] =','.join(infor_list)
 
-        io.set_output('Result', self.Date_dict)
+        io.set_output('result_dict', self.Date_dict)
+        pass
+
 
 #针对简历的不同 重些
 class ParsePagesource_two(Action):
 
     def __call__(self, args, io):
-        page_source = args['page_source']
-        fields = args['Fields']
-        field  = args['Field']
+        page_source = args['page_source_str']
+        fields = args['field_xpath_dict']
+        field  = args['field_dict']
 
         result = {}
         etree = html.etree
@@ -125,5 +128,5 @@ class ParsePagesource_two(Action):
             del result['resumes']
         if len(result["province"])==0:
             print("啦啦啦啦啦啦啦")
-        io.set_output('Result', result)
+        io.set_output('result_str', result)
         io.push_event('Out')

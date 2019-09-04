@@ -4,9 +4,7 @@ copyright. AIIT
 created by LiQing.
 contact blacknepia@dingtail.com for more information
 """
-
 graph_config = {
-    # 节点配置
     'nodes': [
         {
             'event_actions': {'Default': 'Start'},
@@ -17,25 +15,25 @@ graph_config = {
         {
             'event_actions': {'In': 'RequestUrl'},
             'event_links': {'Out': {2: 'In', }},
-            'inputs': {'Url': 0},
-            'outputs': {'Doc': 1}
+            'inputs': {'url_str': 0},
+            'outputs': {'response_str': 1}
         },
         {
             'event_actions': {'In': 'ParseUrl'},
             'event_links': {'Out': {3: 'In'}},
-            'inputs': {'page_source': 1, 'Fields': 2},
-            'outputs': {'Result': 3}
+            'inputs': {'page_source_str': 1, 'xpath_str': 2},
+            'outputs': {'result_list': 3}
         },
         {
             'event_actions': {'In': 'IteratorList'},
             'event_links': {'Out': {4: 'In'}},
-            'inputs': {'doc_in': 3, },
-            'outputs': {'doc_out': 4},
+            'inputs': {'doc_list': 3, },
+            'outputs': {'item_any': 4},
         },
         {
             'event_actions': {'In': 'StringConcat'},
             'event_links': {'Out': {5: 'In'}},
-            'inputs': {'suffix': 4, 'prefix': 5},
+            'inputs': {'suffix': 4, 'prefix_str': 5},
             'outputs': {'doc_out': 6},
         },
         {

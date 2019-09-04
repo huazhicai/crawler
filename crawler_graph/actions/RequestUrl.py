@@ -14,27 +14,28 @@ import time
 """
 需要带encoding,发送reques请求
 """
+
+
 class RequestUrl_Charset(Action):
     def __init__(self):
         self.headers = {
-           'User-Agent':''}
+            'User-Agent': ''}
+
     def __call__(self, args, io):
-        url = args['Url']
-        print(url)
+        url = args['url_str']
         headers = self.headers
         headers['User-Agent'] = UserAgent().chrome
         re = requests.get(url=url, headers=headers)
         time.sleep(1)
-
-        Charset = args['Charset']
+        Charset = args['charset_str']
         re.encoding = Charset
-        con = re.text
-        if re.status_code == 200 and len(con)>0:
-            io.set_output('Doc', con)
+        Content = re.text
+        if re.status_code == 200 and len(Content) > 0:
+            io.set_output('response_str', Content)
             io.push_event('Out')
         else:
-
             self.__call__(args, io)
+
 
 """
 直接发送reques请求
@@ -42,16 +43,16 @@ class RequestUrl_Charset(Action):
 class RequestUrl(Action):
     def __init__(self):
         self.headers = {
-           'User-Agent':''}
+            'User-Agent': ''}
+
     def __call__(self, args, io):
-        url = args['Url']
+        url = args['url_str']
         headers = self.headers
         headers['User-Agent'] = UserAgent().chrome
         re = requests.get(url=url, headers=headers)
-        # time.sleep(1)
-        con = re.text
-        if re.status_code == 200 and len(con) > 0:
-            io.set_output('Doc', con)
+        Content = re.text
+        if re.status_code == 200 and len(Content) > 0:
+            io.set_output('response_str', Content)
             io.push_event('Out')
         else:
             self.__call__(args, io)

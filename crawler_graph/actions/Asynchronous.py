@@ -24,21 +24,24 @@ class AsynchronousRequests(Action):
         self.headers = {
            'User-Agent': ''
         }
+        self.Charset = ''
     def req(self,url,io):
         headers = self.headers
         headers['User-Agent'] = UserAgent().chrome
         re = requests.get(url=url, headers=self.headers)
-        re.encoding = 'gb2312'
-        con = re.text
-        if re.status_code == 200 and len(con) > 0:
-            io.set_output('Doc', con)
+        re.encoding = self.Charset
+        Content = re.text
+        if re.status_code == 200 and len(Content) > 0:
+            io.set_output('Content', Content)
             io.push_event('Out')
         else:
             print("未渲染成功")
             self.req(url, io)
     def __call__(self, args, io):
-        urls = args['Url']
-        gevent.joinall([gevent.spawn(self.req, url,io) for url in urls])
+        urls = args['url_str']
+        self.Charset = args['charset_str']
+        gevent.joinall([gevent.spawn(self.req, url,io,) for url in urls])
+        pass
 
 """
 通过异步Splash渲染页面
@@ -48,29 +51,32 @@ class AsynchronousSplash(Action):
             self.splash_url = "http://10.0.30.10:8050//render.html"
             self.headers = {
                 'User-Agent': ''}
+            self.Charset = ''
         def req(self, url, io):
             headers = self.headers
             headers['User-Agent'] = UserAgent().chrome
-            args = {
+            params = {
                 "url": url,
                 "timeout": 7,
                 "wait": 0.5
             }
-            re = requests.get(self.splash_url, params=args,headers=headers)
-            # time.sleep(1)
-            con = re.text
+            re = requests.get(self.splash_url, params=params,headers=headers)
+            re.encoding = self.Charset
+            Content = re.text
 
-            if re.status_code == 200 and len(con)>0:
-                io.set_output('Doc', con)
+            if re.status_code == 200 and len(Content)>0:
+                io.set_output('Content', Content)
                 io.push_event('Out')
             else:
                 print("未渲染成功")
                 self.req(url, io)
 
         def __call__(self, args, io):
-            urls = args['Url']
+            urls = args['url_str']
+            self.Charset = args['charset_str']
             print(urls)
             gevent.joinall([gevent.spawn(self.req, url, io) for url in urls])
+            pass
 
 
 

@@ -14,8 +14,8 @@ import time
 """
 class IteratorList(Action):
 	def __call__(self, args, io):
-		for doc in args['doc_in']:
-			io.set_output('doc_out', doc)
+		for Element in args['doc_list']:
+			io.set_output('item_any', Element)
 			io.push_event('Out')
 
 

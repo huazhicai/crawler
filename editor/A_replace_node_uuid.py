@@ -1,11 +1,24 @@
 import json
 from uuid import UUID, uuid1
+from collections import OrderedDict
+from pprint import pprint
 
 
 def get_nodes_data():
     with open('meta/nodes.json', 'r') as f:
         defData = json.load(f)
     return defData
+
+
+def adjust_order(defData):
+    """调整节点内的次序"""
+    nodes_data = []
+    for nodeDef in defData:
+        nodeDef['category'] = nodeDef['category']
+        nodeDef['name'] = nodeDef['name']
+        nodeDef['args'] = nodeDef['args']
+        nodeDef['returns'] = nodeDef['returns']
+    pprint(defData)
 
 
 def replace_all_uuid(defData):
@@ -57,10 +70,9 @@ def replace_repeat_uuid(defData):
     with open('meta/nodes.json', 'w') as f:
         json.dump(defData, f, indent=2)
     return
-    # print(type(defData))
-    # print(defData)
 
 
 if __name__ == '__main__':
     defData = get_nodes_data()
     replace_repeat_uuid(defData)
+    # adjust_order(defData)

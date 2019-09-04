@@ -1,5 +1,6 @@
 import json
 import os
+from pprint import pprint
 
 
 class Value(object):
@@ -19,7 +20,7 @@ def validate_def_data(defData):
             except:
                 print('Duplicate UUID !!! : ', uuid)
                 raise
-            # assert UUID(uuid, version=4)
+            assert UUID(uuid, version=4)
             uuidSet.add(uuid)
 
         for ret in nodeDef['returns']:
@@ -29,9 +30,8 @@ def validate_def_data(defData):
             except:
                 print('Duplicate UUID !!! : ', uuid)
                 raise
-            # assert UUID(uuid, version=4)
+            assert UUID(uuid, version=4)
             uuidSet.add(uuid)
-
         uuid = nodeDef['name'][1]
 
         try:
@@ -40,7 +40,7 @@ def validate_def_data(defData):
             print('Duplicate UUID !!! : ', uuid)
             raise
 
-        # assert UUID(uuid, version=4)
+        assert UUID(uuid, version=4)
         uuidSet.add(uuid)
 
     # NOTE: query类节点不可以使用Event
@@ -279,6 +279,7 @@ def do_work(defData, editorData, filename):
             if value['links']:
                 prelinks[value['name']] = [node.funcs[key] for key in node.funcs][0]
             else:
+                assert 'Default' not in prelinks
                 prelinks['Default'] = 'Start'
 
         nodes[node.idx] = {
@@ -316,19 +317,20 @@ def convertFile(editorFilepath):
 
     try:
         result = single_file_export(editorData)
+        # pprint(result)
     except Exception as e:
         traceback.print_exc(file=sys.stderr)
         return False
 
     parts = os.path.splitext(editorFilepath)
-    newFilename = parts[0] + '_new' + '.txt'
+    newFilename = parts[0] + '.txt'
     with open(newFilename, 'w') as f:
         # json.dump(result, f, indent=4)
-        # f.write(result)
-        f.write(json.dumps(result, ensure_ascii=False, indent=2))
+        f.write(str(result))
+        # f.write(json.dumps(result, ensure_ascii=False, indent=2))
     return True
 
 
 if __name__ == '__main__':
-    editorFilepath = 'E:\\PycharmProjects\\crawler\\crawler\\editor\\graph\\temp.json'
+    editorFilepath = 'E:\\PycharmProjects\\crawler\\crawler\\editor\\graph\\test_one.json'
     convertFile(editorFilepath)

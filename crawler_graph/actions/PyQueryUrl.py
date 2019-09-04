@@ -13,13 +13,10 @@ from pyquery import PyQuery
 class PyQueryUrl(Action):
 
     def __call__(self, args, io):
-        url = args['Url']
+        url = args['url_str']
         doc = PyQuery(url)
-
-        fields = args['Fields']
-
+        fields = args['field_css_dict']
         result = {}
-
         for field, (selector, is_list, attr) in fields.items():
             item = doc(selector)
 
@@ -39,9 +36,8 @@ class PyQueryUrl(Action):
                 else:
                     result[field] = item.text()
 
-        io.set_output('Doc', doc)
-        io.set_output('Result', result)
-
+        io.set_output('doc_str', doc)
+        io.set_output('result_dict', result)
         io.push_event('Out')
 
 

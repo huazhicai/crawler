@@ -821,7 +821,7 @@ class DiagramScene(QDMGraphicsScene):
             print('error', item.uuid, 'do not exist in scene')
 
 
-class TemplateScene(QGraphicsScene):
+class TemplateScene(QDMGraphicsScene):
     MoveItem, SelectItem = list(range(2))
 
     itemSelected = pyqtSignal(QGraphicsItem)
