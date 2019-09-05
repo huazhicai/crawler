@@ -24,7 +24,7 @@ class RequestUrl_Charset(Action):
     def __call__(self, args, io):
         url = args['url_str']
         headers = self.headers
-        headers['User-Agent'] = UserAgent().chrome
+        headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
         re = requests.get(url=url, headers=headers)
         time.sleep(1)
         Charset = args['charset_str']
@@ -48,7 +48,7 @@ class RequestUrl(Action):
     def __call__(self, args, io):
         url = args['url_str']
         headers = self.headers
-        headers['User-Agent'] = UserAgent().chrome
+        headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
         re = requests.get(url=url, headers=headers)
         Content = re.text
         if re.status_code == 200 and len(Content) > 0:

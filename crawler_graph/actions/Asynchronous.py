@@ -27,7 +27,7 @@ class AsynchronousRequests(Action):
         self.Charset = ''
     def req(self,url,io):
         headers = self.headers
-        headers['User-Agent'] = UserAgent().chrome
+        headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
         re = requests.get(url=url, headers=self.headers)
         re.encoding = self.Charset
         Content = re.text
@@ -54,7 +54,7 @@ class AsynchronousSplash(Action):
             self.Charset = ''
         def req(self, url, io):
             headers = self.headers
-            headers['User-Agent'] = UserAgent().chrome
+            headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
             params = {
                 "url": url,
                 "timeout": 7,

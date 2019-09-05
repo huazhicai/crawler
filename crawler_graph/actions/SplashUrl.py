@@ -27,7 +27,7 @@ class SplashUrl(Action):
         url = args['url_str']
         Charset = args['charset_str']
         headers = self.headers
-        headers['User-Agent'] = UserAgent().chrome
+        headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
 
         params = {
             "url": url,
