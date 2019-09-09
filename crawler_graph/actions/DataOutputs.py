@@ -13,8 +13,17 @@ import pymongo
 
 
 # 将result结果打印输出
+# from actions.main import MainWindow
+
+
 class ConsoleOutput(Action):
+    def __init__(self):
+        super().__init__()
+
     def __call__(self, args, io):
+        textBrowser = args['qt_text']
+        textBrowser.append(str(args['result_any'])+'\n')
+        textBrowser.moveCursor(textBrowser.textCursor().End)
         print(args['result_any'])
         pass
 
