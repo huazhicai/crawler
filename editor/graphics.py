@@ -8,7 +8,7 @@ from PyQt5.QtGui import QPen, QPainter, QPainterPath, QPolygonF, QPixmap, QColor
 from util import interpolate_cosine_points, editable_types, ItemType, ItemContent, Vec3
 from colors import ColorManager
 from dlg import ChangeValueDialog, TemplateDialog
-from fonts import FontManager, measureWidth
+from font import FontManager, measureWidth
 
 
 class LineBase(QGraphicsLineItem):
@@ -1333,8 +1333,8 @@ class DiagramItemOutput(DiagramItemBase):
 class DiagramItemUnfold(QGraphicsItem):
     Width, Height = 180, 20
 
-    def __init__(self, parent=None, scene=None, deltaWidth=0):
-        super(DiagramItemUnfold, self).__init__(parent, scene)
+    def __init__(self, parent=None, deltaWidth=0):
+        super(DiagramItemUnfold, self).__init__(parent)
 
         self.Width += deltaWidth
 

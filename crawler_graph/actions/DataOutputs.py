@@ -21,9 +21,10 @@ class ConsoleOutput(Action):
         super().__init__()
 
     def __call__(self, args, io):
-        textBrowser = args['qt_text']
-        textBrowser.append(str(args['result_any'])+'\n')
-        textBrowser.moveCursor(textBrowser.textCursor().End)
+        if args.get('qt_text', None):
+            textBrowser = args['qt_text']
+            textBrowser.append(str(args['result_any'])+'\n')
+            textBrowser.moveCursor(textBrowser.textCursor().End)
         print(args['result_any'])
         pass
 

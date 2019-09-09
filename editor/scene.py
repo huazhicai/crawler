@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QPoint, QLine
 from PyQt5.QtGui import QFont, QTransform
 from PyQt5.QtWidgets import QGraphicsScene, QUndoStack
+from future.backports.misc import cmp_to_key
 
 from graphics import *
 from controller import Controller, ControllerManager
@@ -594,12 +595,21 @@ class DiagramScene(QDMGraphicsScene):
                 nodes.append(item)
         return nodes
 
+    def cmp_(self, x, y):
+        if x.depth < y.depth:
+            return -1
+        elif x.depth == y.depth:
+            return 0
+        else:
+            return 1
+
     def _sortSelectedDiagramItemByDepth(self):
         selected = []
         for item in self.selectedItems():
             if isinstance(item, DiagramItem):
                 selected.append(item)
-        selected = sorted(selected, lambda x, y: cmp(x.depth, y.depth))
+        selected = sorted(selected, key=cmp_to_key(self.cmp_))
+        # selected = sorted(selected, self.cmp_(x, y))
         return selected
 
     def copyItem(self):

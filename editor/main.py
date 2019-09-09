@@ -19,7 +19,7 @@ from dlg import ResizeSceneDialog, SaveQuestionDialog, OverrideDialog
 from mutil import simpleFileName
 import data
 import time
-from fonts import FontManager
+from font import FontManager
 from version import buildDate, version
 
 
@@ -561,6 +561,8 @@ class MainWindow(QMainWindow):
             if filename.strip() == '':
                 # 文件名为空，未获得文件名，标识因取消而不保存
                 return False
+            if filename.endswith('.txt'):
+                filename = filename.strip('.txt')
 
             if not filename.endswith('.json'):
                 filename = filename + '.json'
