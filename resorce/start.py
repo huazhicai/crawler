@@ -1,13 +1,8 @@
-from gui import Ico
-import sys
-from PyQt5.QtCore import QFile,QTextStream
-from PyQt5.QtWidgets import QApplication
+import requests
+import time
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-
-    ex = Ico()
-
-    sys.exit(app.exec_())
-
+start = time.time()
+response = requests.get('http://python.org')
+print(response.text)
+end = time.time()
+print(end-start)

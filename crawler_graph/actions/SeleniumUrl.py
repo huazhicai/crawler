@@ -13,10 +13,9 @@ import time
 from selenium import webdriver
 from time import sleep
 
-ss = requests.Session()
 
-
-# class SeleniumUrl(Action):
+# class SeleniumUrlsssssss(Action):
+#暂时不用写这个节点
 #     def __init__(self):
 #         self.options = webdriver.ChromeOptions()
 #         self.options.binary_location = r"C:\Program Files (x86)\ChromeCore\ChromeCore.exe"
@@ -47,31 +46,54 @@ ss = requests.Session()
 #             time.sleep(3)
 #             content = self.browser.page_source
 #             io.set_output('result', content)
-#
 #             io.push_event('Out')
 """
 通过selenium模拟，获取网页源代码
 """
-# class SeleniumUrl_two(Action):
+# class SeleniumUrl_headless(Action):
 #     def __init__(self):
 #         self.options = webdriver.ChromeOptions()
 #         self.options.add_argument("--headless")
-#         self.options.binary_location = r"C:\Program Files (x86)\ChromeCore\ChromeCore.exe"
-#         self.chrome_driver_path = r"D:\Crawl/chromedriver.exe"
-#         self.browser = webdriver.Chrome(self.chrome_driver_path, options=self.options)
-#         self.Sesson = requests.Session()
-#
 #     def __call__(self, args, io):
+#         self.options.binary_location = args['browser_address_str']
+#         self.chrome_driver_path = args['driver_address_str']
+#         self.browser = webdriver.Chrome(self.chrome_driver_path, options=self.options)
 #         url = args['Url']
-#         print(url)
 #         self.browser.get(url)
 #         time.sleep(1)
-#         con = self.browser.page_source
+#         Content = self.browser.page_source
 #         etree = html.etree
-#         tree = etree.HTML(con)
-#         province = tree.xpath('//div[@class="luj"]/a[3]/text()')
-#         if len(province) != 0:
-#             io.set_output('Doc', con)
+#         tree = etree.HTML(Content)
+#         title = tree.xpath('/html/head/title/text()')
+#         title = ''.join(title)
+#         title = ' '.join(title.split())
+#         webpage_title = args['webpage_title_str']
+#         if title == webpage_title:
+#             io.set_output('response_str', Content)
+#             io.push_event('Out')
+#         else:
+#             print("未渲染成功")
+#             self.__call__(args, io)
+
+# class SeleniumUrl(Action):
+#     def __init__(self):
+#         self.options = webdriver.ChromeOptions()
+#     def __call__(self, args, io):
+#         self.options.binary_location = args['browser_address_str']
+#         self.chrome_driver_path = args['driver_address_str']
+#         self.browser = webdriver.Chrome(self.chrome_driver_path, options=self.options)
+#         url = args['Url']
+#         self.browser.get(url)
+#         time.sleep(1)
+#         Content = self.browser.page_source
+#         etree = html.etree
+#         tree = etree.HTML(Content)
+#         title = tree.xpath('/html/head/title/text()')
+#         title = ''.join(title)
+#         title = ' '.join(title.split())
+#         webpage_title = args['webpage_title_str']
+#         if title == webpage_title:
+#             io.set_output('response_str', Content)
 #             io.push_event('Out')
 #         else:
 #             print("未渲染成功")

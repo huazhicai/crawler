@@ -3,13 +3,14 @@
 import sys
 import os
 import subprocess
-
-# from PyQt5.Qt import *
 import threading
 
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtGui import *
 
-from graphics import *
+# from graphics import *
+from PyQt5.QtWidgets import *
+
 from scene import DiagramScene
 from view import DiagramView
 from widgets import GraphWidget, TemplateWidget
@@ -93,7 +94,6 @@ class MainWindow(QMainWindow):
             if not widget.editFlag:
                 self.clearTab(index)
                 return
-
             dlg = SaveQuestionDialog(doneChoice=self.whetherToSave,
                                      index=index)
             if dlg.exec_():
@@ -523,10 +523,9 @@ class MainWindow(QMainWindow):
             return
         data = graphWidget.runGraph()
         config_data = single_file_export(data)
-        # start(config_data)
-        t = threading.Thread(target=start, args=(config_data,))
-        t.start()
-        # time.sleep(60)
+        # t = threading.Thread(target=start, args=(config_data,))
+        obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'start.py')
+        subprocess.Popen(["python3", obj_file, config_data], stdout=subprocess.PIPE)
 
     def saveGraph(self):
         """

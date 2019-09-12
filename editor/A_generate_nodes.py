@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import re
 from pprint import pprint
 from uuid import uuid1
@@ -10,7 +9,7 @@ ACTIONS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_
 
 class GenerateNodes(object):
     def __init__(self):
-        self.nodes = [{
+        self.start_node = {
             "category": "Event",
             "returns": [{
                 "type": "Event",
@@ -22,7 +21,7 @@ class GenerateNodes(object):
                 "action": "Start"
             }],
             "name": ["Start", "9ed37096-bc78-47c9-b0d0-44fef1f8002d"]
-        }]
+        }
 
     def read_file(self, file):
         with open(file, encoding='UTF-8') as f:
@@ -34,7 +33,7 @@ class GenerateNodes(object):
             if c.endswith('.py') and c.find("Event") == -1:
                 result = self.read_file(os.path.join(ACTIONS_DIR, c))
                 # 提取类的模式
-                pattern = r'\nclass.*?push_event\(\'.*?\'\)|\nclass.*?pass'
+                pattern = r'\nclass.*?push_event\(\'.*?\'\)|\nclass.*?pass'  # 此处有漏网之鱼
                 actions = re.findall(pattern, result, re.S)
                 category = c.strip('.py')
                 for item in actions:
@@ -51,12 +50,12 @@ class GenerateNodes(object):
                         returns_ = [x[x.index("(") + 2:-1] for x in
                                     re.findall(r'set_output\(\'.+?\'|push_event\(\'Out\'', item)]
                         returns = [{"type": self.get_data_type(x), "name": [x, str(uuid1())]} for x in returns_]
-                        self.nodes.append({
+                        yield {
                             "category": category,
                             "name": name,
                             'args': args,
                             'returns': returns
-                        })
+                        }
 
     def get_data_type(self, item):
         if item in ('Out', 'In'):
@@ -77,25 +76,26 @@ class GenerateNodes(object):
                 type_ = "Any"
         return type_
 
-    def write_to_json(self):
+    def write_to_json(self, file_path):
         nodeSet = set()
-        self.get_class_node(nodeSet)
-        # print(self.nodes)
-        with open('meta/nodes.json', 'w') as f:
-            json.dump(self.nodes, f, indent=2)
+        if not os.path.exists(file_path):
+            defData = [self.start_node]
+        else:
+            with open(file_path, 'r') as f:
+                defData = json.load(f)
 
-    def add_to_json(self):
-        nodeSet = set()
-        with open('meta/nodes.json') as f:
-            defData = json.load(f)
         for nodeDef in defData:
             nodeSet.add(nodeDef['name'][0])
-        self.get_class_node(nodeSet)
-        with open('meta/nodes.json', 'a') as f:
-            json.dump(self.nodes, f, indent=2)
+
+        for node in self.get_class_node(nodeSet):
+            defData.append(node)
+
+        with open(file_path, 'w') as f:
+            json.dump(defData, f, indent=2)
+            print("Ok")
 
 
 if __name__ == '__main__':
-    nodes = GenerateNodes()
-    nodes.write_to_json()
-    # nodes.add_to_json()
+    file_path = 'meta/nodes.json'
+    generate = GenerateNodes()
+    generate.write_to_json(file_path)

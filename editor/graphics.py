@@ -815,6 +815,35 @@ class DiagramItem(DiagramItemBase):
                     return item
         return None
 
+    # ================================
+    def contextMenuEvent(self, event):
+        super().contextMenuEvent(event)
+        menu = QMenu()
+        # triggerAction = menu.addAction('Trigger')
+        deleteAction = menu.addAction('Delete')
+        deleteAction.triggered.connect(self.deleteItem)
+        copyAction = menu.addAction('Copy')
+        copyAction.triggered.connect(self.copyItem)
+        pasteAction = menu.addAction('Paste')
+        pasteAction.triggered.connect(self.pasteItem)
+        cutAction = menu.addAction('Cut')
+        cutAction.triggered.connect(self.cutItem)
+        # triggerAction.triggered.connect(self.triggerNodeEvent)
+        menu.exec_(event.screenPos())
+
+    def deleteItem(self):
+        from scene import DiagramScene
+        self.scene = DiagramScene()
+        self.scene.removeItem(item)
+
+    def copyItem(self):
+        pass
+
+    def pasteItem(self):
+        pass
+
+    def cutItem(self):
+        pass
 
 class DiagramItemRow(DiagramItemBase):
     InputWidth, InputHeight = 20, 20

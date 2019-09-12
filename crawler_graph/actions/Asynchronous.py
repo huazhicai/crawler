@@ -38,7 +38,7 @@ class AsynchronousRequests(Action):
             print("未渲染成功")
             self.req(url, io)
     def __call__(self, args, io):
-        urls = args['url_str']
+        urls = args['url_list']
         self.Charset = args['charset_str']
         gevent.joinall([gevent.spawn(self.req, url,io,) for url in urls])
         pass
@@ -52,6 +52,13 @@ class AsynchronousSplash(Action):
             self.headers = {
                 'User-Agent': ''}
             self.Charset = ''
+
+        def __call__(self, args, io):
+            urls = args['url_list']
+            self.Charset = args['charset_str']
+            print(urls)
+            gevent.joinall([gevent.spawn(self.req, url, io) for url in urls])
+
         def req(self, url, io):
             headers = self.headers
             headers['User-Agent'] = UserAgent(verify_ssl=False).chrome
@@ -71,12 +78,8 @@ class AsynchronousSplash(Action):
                 print("未渲染成功")
                 self.req(url, io)
 
-        def __call__(self, args, io):
-            urls = args['url_str']
-            self.Charset = args['charset_str']
-            print(urls)
-            gevent.joinall([gevent.spawn(self.req, url, io) for url in urls])
-            pass
+
+
 
 
 

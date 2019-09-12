@@ -1,13 +1,22 @@
 from runtime.Action import Action
 from lxml import html
 
-# 页面解析内容
+
+
+class Json_loads(Action):
+
+    def __call__(self, args, io):
+        import json
+        content = args['page_source_str']
+        result = json.loads(content)
+        io.set_output('result_str', result)
+        io.push_event('Out')
+
+
 
 """
 通过xpath ，获取多个字段
 """
-
-
 class ParsePagesource(Action):
     def __call__(self, args, io):
         Page_source = args['page_source_str']

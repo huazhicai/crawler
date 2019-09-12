@@ -1,113 +1,95 @@
-import codecs
-from lxml import etree
-import time
-import requests
-import re
-import csv
-from PyQt5.QtCore import QThread, pyqtSignal
+import os
+
+from common.base_crawler import Crawler
+from asyncio import Queue
+import asyncio
+from config.config import *
+import aiofiles
+from decorators.decorators import decorator
+from logger.log import storage
+
+headers = {
+    "host": "api.meizitu.net",
+    "Referer": "https://app.mmzztt.com",
+    "user-agent": "Mozilla/5.0 (Linux; Android 9; ALP-AL00 Build/HUAWEIALP-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/72.0.3626.121 Mobile Safari/537.36"
+}
+headers2 = {
+
+}
 
 
-class CrawlThread(QThread):
-    log_signal = pyqtSignal(str)
+class MZTAPP_Spider(Crawler):
+    def __init__(self):
+        self.q = Queue()
+        self.q2 = Queue()
 
-    def __init__(self, job):
-        super(CrawlThread, self).__init__()
+    @decorator()
+    async def start(self):
+        [self.q.put_nowait(
+            f"https://api.meizitu.net/wp-json/wp/v2/comments?post={POST_ID}&per_page={PER_PAGE}&page={i}") for i in
+            range(1, MAX_PAGE)]
+        await self.init_session()
+        tasks = [asyncio.Task(self.work()) for _ in range(CONCURRENCY_NUM)]
+        await self.q.join()
+        for i in tasks:
+            i.cancel()
+        # await asyncio.wait(tasks)
+        # await self.close()
 
-        self.headers = {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'en',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36', }
-        self.job = job
-        self.url = r"https://www.zhipin.com/c100010000/?query=" + job + "&page="
-        self.domain = "https://www.zhipin.com"
+    async def work(self):
+        try:
+            while not self.q.empty():
+                url = await self.q.get()
+                await self.get_page(url)
+                self.q.task_done()
+        except asyncio.CancelledError:
+            pass
 
-    def run(self):
+    async def work2(self):
+        while not self.q2.empty():
+            dic = await self.q2.get()
+            await self.get_img(dic)
 
-        self.fp = open('img/test.csv', 'a', encoding='utf-8_sig', newline="")
-        headers = ['name', 'salary', 'city', 'work_years', 'education', 'company', 'job_request', 'company_detail',
-                   'company_size', 'company_caterogy', 'company_date', 'company_money', 'company_type',
-                   'company_stauts']
-        self.writer = csv.DictWriter(self.fp, headers)
-        self.writer.writeheader()
-        for i in range(1, 11):
-            new_url = self.url + str(i)
-            response = requests.get(url=new_url, headers=self.headers)
+    @decorator(False)
+    async def get_img(self, dic):
+        kwargs = {"headers": headers2}
+        url = dic["img_src"]
+        title = dic['date'].replace("-", "").replace(":", "")
+        file_name = title[0:8]
+        id = dic['id']
+        if not os.path.exists(f"{FILE_PATH}/{IMAGE_TYPE}/{file_name}/{title}_{id}.jpg"):
+            response = await self.get_session(url, kwargs)
+            buff = response.source
+            await self.save_img(buff, file_name, id)
 
-            html = etree.HTML(response.text)
-            links = html.xpath("//div[@class='info-primary']//h3[@class='name']/a/@href")
-            if (len(links) == 0):
-                self.log_signal.emit("不好意思，你输入的关键字有误，或者是你的信息已经爬完,也可能你的IP被封了")
-            for link in links:
-                link = self.domain + link
-                self.parse_detail(link)
+    async def get_page(self, url):
+        kwargs = {"headers": headers}
+        response = await self.get_session(url, kwargs)
+        j_data = response.source
+        [self.q2.put_nowait(data) for data in j_data]
+        tasks = [asyncio.ensure_future(self.work2()) for _ in range(len(j_data))]
+        await asyncio.wait(tasks)
 
-                time.sleep(2)
-            time.sleep(2)
+    async def save_img(self, buff, filename, index):
+        file_path = f"{FILE_PATH}/{IMAGE_TYPE}/{filename}"
+        if not os.path.exists(file_path):
+            os.makedirs(file_path)
 
-    def parse_detail(self, link):
-        response = requests.get(url=link, headers=self.headers)
-        self.log_signal.emit(str(response))
-        html = etree.HTML(response.text)
-        # 岗位名称
-        name = html.xpath("//div[@class='name']/h1/text()")[0].strip()
-        # 薪水
-        salary = html.xpath("//div[@class='name']/span[@class='badge']/text()")[0].strip()
-        # 城市
-        city = html.xpath("//div[@class='info-primary']/p/text()")[0].split("：")[0]
-        # 经验要求
-        exeperience = html.xpath("//div[@class='info-primary']/p/text()")[1].split("：")[0]
-        # 学历要求
-        education = html.xpath("//div[@class='info-primary']/p/text()")[2].split("：")[0]
-        # 公司名称
-        company = html.xpath("//div[@class='company-info']//a/@title")[0].strip()
-        # 岗位要求
-        desc = re.split(r'\\n', ("".join(html.xpath("//div[@class='text']/text()")).strip()))[0]
-        # 公司是否需要融资
-        # 公司规模
-        company_zong = html.xpath("//div[@class='sider-company']/p/text()")
-        if len(company_zong) < 3:
-            company_detail = "不详"
-            company_size = company_zong[1].strip()
+        img_path = os.path.join(file_path, f"{index}.jpg")
+        storage.info(f"正在保存:{img_path}")
+        if os.path.exists(img_path):
+            pass
         else:
-            company_detail = company_zong[1].strip()
-            company_size = company_zong[2].strip()
+            async with aiofiles.open(img_path, "wb") as fs:
+                await fs.write(buff)
 
-        # 公司类别
-        company_caterogy = html.xpath("//div[@class='sider-company']/p/a/text()")[0].strip()
-        # 公司注册时间
-        company_date = html.xpath("//div[@class='level-list']/li[@class='res-time']/text()")
-        if (len(company_date) == 0):
-            company_date = "没有-注册"
-        else:
-            company_date = company_date[0]
-        # 公司注册资金
-        company_all = html.xpath("//div[@class='level-list']/li/text()")
-        if (len(company_all) == 0):
-            company_money = "不详"
-            company_type = "不详"
-            company_stauts = "不详"
-        else:
-            company_money = html.xpath("//div[@class='level-list']/li/text()")[1].strip()
-            # 公司详情
-            company_type = html.xpath("//div[@class='level-list']/li/text()")[-2].strip()
-            # 公司状态
-            company_stauts = html.xpath("//div[@class='level-list']/li/text()")[-1].strip()
-        self.position = {
-            'name': name,
-            'salary': salary,
-            'city': city,
-            'work_years': exeperience,
-            'education': education,
-            'company': company,
-            'job_request': desc,
-            'company_detail': company_detail,
-            'company_size': company_size,
-            'company_caterogy': company_caterogy,
-            'company_date': company_date,
-            'company_money': company_money,
-            'company_type': company_type,
-            'company_stauts': company_stauts
 
-        }
-        self.log_signal.emit(str(self.position))
-        self.writer.writerow(self.position)
+if __name__ == '__main__':
+    m = MZTAPP_Spider()
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(m.start())
+    finally:
+        loop.stop()
+        loop.run_forever()
+        loop.close()
