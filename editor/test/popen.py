@@ -34,7 +34,14 @@ config_data = {
 
 
 obj_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'crawler_graph', 'start.py')
-print(obj_file)
-p1 = subprocess.Popen(["python3", obj_file, config_data], shell=True, stdout=subprocess.PIPE)
-print(p1.stdout.read())
-# print(p1.communicate())
+# print(obj_file)
+proc = subprocess.Popen(["python3", obj_file, str(config_data)], shell=True, stdout=subprocess.PIPE)
+# try:
+#     outs, errs = proc.communicate(timeout=15)
+#     print(outs)
+# except subprocess.TimeoutExpired:
+#     proc.kill()
+#     outs, errs = proc.communicate()
+# p1 = subprocess.run(["python3", obj_file, str(config_data)], capture_output=True)
+print(proc.stdout.read())
+# print(proc.communicate())

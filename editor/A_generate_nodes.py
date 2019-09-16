@@ -89,7 +89,6 @@ class GenerateNodes(object):
 
         for node in self.get_class_node(nodeSet):
             defData.append(node)
-
         with open(file_path, 'w') as f:
             json.dump(defData, f, indent=2)
             print("Ok")
