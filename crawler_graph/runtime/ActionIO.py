@@ -13,8 +13,7 @@ class DataCore(object):
         self.runtime_data = []
 
     def init_runtime(self, runtime):
-        # self.runtime_data = deepcopy(runtime)  # runtime_data
-        self.runtime_data = runtime  # runtime_data
+        self.runtime_data = deepcopy(runtime)  # runtime_data
 
     # 	#graph_config['runtime_data']深拷贝，数据独立  无法被 被拷贝对象影响
 

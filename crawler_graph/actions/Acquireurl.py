@@ -35,18 +35,7 @@ class Acquireurl_list(Action):
         io.push_event('Out')
 
 
-"""
-单个字符串拼接
-"""
 
-
-class StringConcat(Action):
-    def __call__(self, args, io):
-        Prefix = args['prefix_str']
-        Suffix = args['suffix_str']
-        string = Prefix + Suffix
-        io.set_output('contacted_str', string)
-        io.push_event('Out')
 
 
 """

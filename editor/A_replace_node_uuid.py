@@ -63,7 +63,7 @@ def replace_repeat_uuid(defData):
             assert uuid not in uuidSet
             assert UUID(uuid, version=4)
         except:
-            nodeDef['name'][1] = uuid()
+            nodeDef['name'][1] = str(uuid1())
             print(uuid, 'has been replaced by', nodeDef['name'][1])
         uuidSet.add(uuid)
 

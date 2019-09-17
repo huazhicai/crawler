@@ -11,26 +11,19 @@ contact blacknepia@dingtail.com for more information
 from runtime.Action import Action
 import pymongo
 
-
-# 将result结果打印输出
-# from actions.main import MainWindow
-
-
 class ConsoleOutput(Action):
-    def __init__(self):
-        super().__init__()
-
     def __call__(self, args, io):
-        if args.get('qt_text', None):
-            textBrowser = args['qt_text']
-            textBrowser.append(str(args['result_any'])+'\n')
-            textBrowser.moveCursor(textBrowser.textCursor().End)
-        print(args['result_any'])
+        prefix = args.get('prefix_optional_str', None)
+        result = args['result_any']
+        if prefix:
+            print(prefix, result)
+        else:
+            print(result)
         pass
 
 
-# 将数据存入Mongodb中
 class MongoOutput(Action):
+    # 将数据存入Mongodb中
     def __call__(self, args, io):
         mongo_url = args['url_str']
         mongo_db = args['db_str']
@@ -42,3 +35,24 @@ class MongoOutput(Action):
         collection = db[mongo_chart]
         collection.update_one({'url_id': data['url_id']}, {'$set': data}, True)
         pass
+
+
+
+
+# class DataStore_Str(Action):
+    """
+    对数据储存
+    """
+#     def __call__(self, args, io):
+#         Data = args['Data_str']
+#         io.set_output('Data_str', Data)
+#
+# class DataStore_List(Action):
+#     def __call__(self, args, io):
+#         Data = args['Data_List']
+#         io.set_output('Data_List', Data)
+#
+# class DataStore_Dict(Action):
+#     def __call__(self, args, io):
+#         Data = args['Data_str']
+#         io.set_output('Data_str', Data)

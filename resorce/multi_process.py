@@ -84,3 +84,14 @@ if __name__ == "__main__":
     start = time.time()
     main()
     print('[info]耗时：%s' % (time.time() - start))
+
+conf = {
+    'aircraft_type': 'td[1]/a/strong/text()',
+    'start_time': 'td[2]/strong/text()',
+    'start_station_name': 'td[2]/div/text()',
+    'arrive_time': 'td[4]/strong/text()',
+    'arrive_station_name': 'td[4]/div/text()',
+    'week_schedule': 'td[5]/div[1]/span[@class="blue"]/text()',
+    'punctuality': 'td[6]/text()',
+    'price': 'td[7]/span/text()'
+}
