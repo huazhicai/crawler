@@ -4,8 +4,8 @@ from collections import OrderedDict
 from pprint import pprint
 
 
-def get_nodes_data():
-    with open('meta/nodes.json', 'r') as f:
+def get_nodes_data(file):
+    with open(file, 'r') as f:
         defData = json.load(f)
     return defData
 
@@ -73,6 +73,7 @@ def replace_repeat_uuid(defData):
 
 
 if __name__ == '__main__':
-    defData = get_nodes_data()
+    file_path = 'meta/nodes.json'
+    defData = get_nodes_data(file_path)
     replace_repeat_uuid(defData)
     # adjust_order(defData)

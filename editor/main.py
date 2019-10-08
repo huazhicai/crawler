@@ -11,6 +11,7 @@ from PyQt5.QtGui import *
 
 # from graphics import *
 from PyQt5.QtWidgets import *
+from datetime import datetime
 
 from scene import DiagramScene
 from view import DiagramView
@@ -119,8 +120,8 @@ class MainWindow(QMainWindow):
             self.tabCount += 1
             # 调用源码函数，增加新的页面，页面个名字tempTitle. 底层是C++实现的
             self.tabWidget.addTab(tab, tempTitle)
-            self.tabWidget.setCurrentWidget(tab)   # 当前的tab就是新建的tab
-            tab.setScriptMode('new')   # 设置脚本模式
+            self.tabWidget.setCurrentWidget(tab)  # 当前的tab就是新建的tab
+            tab.setScriptMode('new')  # 设置脚本模式
             # 设置页面的提示信息,
             self.tabWidget.setTabToolTip(self.tabWidget.currentIndex(), 'new')
         else:
@@ -142,54 +143,54 @@ class MainWindow(QMainWindow):
 
     def createActions(self):
         self.deleteAction = QAction(
-                QIcon('./images/delete.png'),
-                '&Delete item',
-                self,
-                shortcut='Del',
-                statusTip='Delete a item',
-                triggered=self.deleteItem)
+            QIcon('./images/delete.png'),
+            '&Delete item',
+            self,
+            shortcut='Del',
+            statusTip='Delete a item',
+            triggered=self.deleteItem)
         self.runGraphAction = QAction(
-                QIcon('./images/run.png'),
-                '&Run graph file',
-                self,
-                shortcut='Shift+F10',
-                statusTip='Execute file',
-                triggered=self.runGraph)
+            QIcon('./images/run.png'),
+            '&Run graph file',
+            self,
+            shortcut='Shift+F10',
+            statusTip='Execute file',
+            triggered=self.runGraph)
         self.newGraphAction = QAction(
-                QIcon('./images/filenew.png'),
-                '&New graph',
-                self,
-                shortcut='Ctrl+N',
-                statusTip='create a new graph',
-                triggered=self.newGraph)
+            QIcon('./images/filenew.png'),
+            '&New graph',
+            self,
+            shortcut='Ctrl+N',
+            statusTip='create a new graph',
+            triggered=self.newGraph)
         self.openGraphAction = QAction(
-                QIcon('./images/fileopen.png'),
-                '&Open graph',
-                self,
-                shortcut='Ctrl+O',
-                statusTip='open a graph',
-                triggered=self.openGraph)
+            QIcon('./images/fileopen.png'),
+            '&Open graph',
+            self,
+            shortcut='Ctrl+O',
+            statusTip='open a graph',
+            triggered=self.openGraph)
         self.openTemplateAction = QAction(
-                QIcon('./images/template.png'),
-                '&Open Template',
-                self,
-                shortcut='',
-                statusTip='open meta template',
-                triggered=self.openTemplate)
+            QIcon('./images/template.png'),
+            '&Open Template',
+            self,
+            shortcut='',
+            statusTip='open meta template',
+            triggered=self.openTemplate)
         self.closeGraphAction = QAction(
-                QIcon('./images/fileclose.png'),
-                '&Close graph',
-                self,
-                shortcut='Ctrl+W',
-                statusTip='close a graph',
-                triggered=self.closeGraph)
+            QIcon('./images/fileclose.png'),
+            '&Close graph',
+            self,
+            shortcut='Ctrl+W',
+            statusTip='close a graph',
+            triggered=self.closeGraph)
         self.saveAction = QAction(
-                QIcon('./images/filesave.png'),
-                '&Save',
-                self,
-                shortcut='Ctrl+S',
-                statusTip='save',
-                triggered=self.save)
+            QIcon('./images/filesave.png'),
+            '&Save',
+            self,
+            shortcut='Ctrl+S',
+            statusTip='save',
+            triggered=self.save)
         # self.saveGraphAction = QAction(
         # 	QIcon('./images/filesave.png'),
         # 	'&Save graph',
@@ -198,192 +199,192 @@ class MainWindow(QMainWindow):
         # 	statusTip='save a graph',
         # 	triggered=self.saveGraph)
         self.exportGraphAction = QAction(
-                QIcon('./images/image.png'),
-                '&Export Image',
-                self,
-                shortcut='',
-                statusTip='export to image',
-                triggered=self.exportGraph)
+            QIcon('./images/image.png'),
+            '&Export Image',
+            self,
+            shortcut='',
+            statusTip='export to image',
+            triggered=self.exportGraph)
         self.convertFileAction = QAction(
-                QIcon('./images/convert.png'),
-                '&Convert File',
-                self,
-                shortcut='',
-                statusTip='convert a graph file',
-                triggered=self.convertFile)
+            QIcon('./images/convert.png'),
+            '&Convert File',
+            self,
+            shortcut='',
+            statusTip='convert a graph file',
+            triggered=self.convertFile)
         self.exitAction = QAction(
-                QIcon('./images/exit.png'),
-                '&Exit',
-                self,
-                shortcut='Ctrl+Q',
-                statusTip='exit',
-                triggered=self.exitMe)
+            QIcon('./images/exit.png'),
+            '&Exit',
+            self,
+            shortcut='Ctrl+Q',
+            statusTip='exit',
+            triggered=self.exitMe)
 
         self.copyAction = QAction(
-                QIcon('images/copy.png'),
-                '&Copy',
-                self,
-                shortcut='Ctrl+C',
-                statusTip='copy an item',
-                triggered=self.copyItem)
+            QIcon('images/copy.png'),
+            '&Copy',
+            self,
+            shortcut='Ctrl+C',
+            statusTip='copy an item',
+            triggered=self.copyItem)
         self.cutAction = QAction(
-                QIcon('images/cut.png'),
-                '&Cut',
-                self,
-                shortcut='Ctrl+X',
-                statusTip='cut an item',
-                triggered=self.cutItem)
+            QIcon('images/cut.png'),
+            '&Cut',
+            self,
+            shortcut='Ctrl+X',
+            statusTip='cut an item',
+            triggered=self.cutItem)
         self.pasteAction = QAction(
-                QIcon('images/paste.png'),
-                '&Paste',
-                self,
-                shortcut='Ctrl+V',
-                statusTip='paste an item',
-                triggered=self.pasteItem)
+            QIcon('images/paste.png'),
+            '&Paste',
+            self,
+            shortcut='Ctrl+V',
+            statusTip='paste an item',
+            triggered=self.pasteItem)
 
         self.resizeSceneAction = QAction(
-                QIcon('images/resize.png'),
-                '&Resize scene',
-                self,
-                shortcut='',
-                statusTip='resize the scene size',
-                triggered=self.resizeScene)
+            QIcon('images/resize.png'),
+            '&Resize scene',
+            self,
+            shortcut='',
+            statusTip='resize the scene size',
+            triggered=self.resizeScene)
         self.undoAction = QAction(
-                QIcon('images/undo.png'),
-                '&Undo',
-                self,
-                shortcut='Ctrl+Z',
-                statusTip='Undo previous operation',
-                triggered=self.undo)
+            QIcon('images/undo.png'),
+            '&Undo',
+            self,
+            shortcut='Ctrl+Z',
+            statusTip='Undo previous operation',
+            triggered=self.undo)
         self.redoAction = QAction(
-                QIcon('images/redo.png'),
-                '&Redo',
-                self,
-                shortcut='Ctrl+Shift+Z',
-                statusTip='Redo previous operation',
-                triggered=self.redo)
+            QIcon('images/redo.png'),
+            '&Redo',
+            self,
+            shortcut='Ctrl+Shift+Z',
+            statusTip='Redo previous operation',
+            triggered=self.redo)
         self.findAction = QAction(
-                QIcon('images/find.png'),
-                '&Find',
-                self,
-                shortcut='Ctrl+F',
-                statusTip='Find item',
-                triggered=self.find_)
+            QIcon('images/find.png'),
+            '&Find',
+            self,
+            shortcut='Ctrl+F',
+            statusTip='Find item',
+            triggered=self.find_)
         self.replaceAction = QAction(
-                QIcon('images/replace.png'),
-                '&Replace',
-                self,
-                shortcut='Ctrl+H',
-                statusTip='Replace some values',
-                triggered=self.replace
+            QIcon('images/replace.png'),
+            '&Replace',
+            self,
+            shortcut='Ctrl+H',
+            statusTip='Replace some values',
+            triggered=self.replace
         )
         self.aboutAction = QAction(
-                QIcon(''),
-                '&About',
-                self,
-                shortcut='',
-                statusTip='about me',
-                triggered=self.aboutMe)
+            QIcon(''),
+            '&About',
+            self,
+            shortcut='',
+            statusTip='about me',
+            triggered=self.aboutMe)
         self.startGameClientAction = QAction(
-                QIcon(''),
-                '&Start Game Client',
-                self,
-                shortcut='',
-                statusTip='start game client',
-                triggered=self.startGameClient)
+            QIcon(''),
+            '&Start Game Client',
+            self,
+            shortcut='',
+            statusTip='start game client',
+            triggered=self.startGameClient)
         self.exportTableAction = QAction(
-                QIcon('images/export_table.png'),
-                '&Export Table',
-                self,
-                shortcut='',
-                statusTip='export table',
-                triggered=self.exportTable)
+            QIcon('images/export_table.png'),
+            '&Export Table',
+            self,
+            shortcut='',
+            statusTip='export table',
+            triggered=self.exportTable)
         self.runAction = QAction(
-                QIcon('images/start.png'),
-                '&Run in Game',
-                self,
-                shortcut='',
-                statusTip='run in game',
-                triggered=self.runInGameWithoutTable)
+            QIcon('images/start.png'),
+            '&Run in Game',
+            self,
+            shortcut='',
+            statusTip='run in game',
+            triggered=self.runInGameWithoutTable)
         self.runActionTable = QAction(
-                QIcon('images/start.png'),
-                '&Run in Game(路点导表)',
-                self,
-                shortcut='',
-                statusTip='run in game',
-                triggered=self.runInGameWithTable)
+            QIcon('images/start.png'),
+            '&Run in Game(路点导表)',
+            self,
+            shortcut='',
+            statusTip='run in game',
+            triggered=self.runInGameWithTable)
 
         self.widerAction = QAction(
-                QIcon(''),
-                '&Wider',
-                self,
-                shortcut='Ctrl+=',
-                statusTip='item wider',
-                triggered=self.itemWider)
+            QIcon(''),
+            '&Wider',
+            self,
+            shortcut='Ctrl+=',
+            statusTip='item wider',
+            triggered=self.itemWider)
         self.thinnerAction = QAction(
-                QIcon(''),
-                '&Thinner',
-                self,
-                shortcut='Ctrl+-',
-                statusTip='item thinner',
-                triggered=self.itemThinner)
+            QIcon(''),
+            '&Thinner',
+            self,
+            shortcut='Ctrl+-',
+            statusTip='item thinner',
+            triggered=self.itemThinner)
         self.foldAction = QAction(
-                QIcon('images/fold.png'),
-                '&Fold',
-                self,
-                shortcut='Ctrl+M',
-                statusTip='fold item',
-                triggered=self.itemFold)
+            QIcon('images/fold.png'),
+            '&Fold',
+            self,
+            shortcut='Ctrl+M',
+            statusTip='fold item',
+            triggered=self.itemFold)
         self.unfoldAction = QAction(
-                QIcon('images/unfold.png'),
-                '&Unfold',
-                self,
-                shortcut='Ctrl+Shift+M',
-                statusTip='unfold item',
-                triggered=self.itemUnfold)
+            QIcon('images/unfold.png'),
+            '&Unfold',
+            self,
+            shortcut='Ctrl+Shift+M',
+            statusTip='unfold item',
+            triggered=self.itemUnfold)
         self.commentAction = QAction(
-                QIcon(''),
-                '&Comment',
-                self,
-                shortcut='Ctrl+T',
-                statusTip='add comment',
-                triggered=self.commentItem)
+            QIcon(''),
+            '&Comment',
+            self,
+            shortcut='Ctrl+T',
+            statusTip='add comment',
+            triggered=self.commentItem)
         self.freeCommentAction = QAction(
-                QIcon(''),
-                '&Free Comment',
-                self,
-                shortcut='Ctrl+G',
-                statusTip='add free comment',
-                triggered=self.freeComment)
+            QIcon(''),
+            '&Free Comment',
+            self,
+            shortcut='Ctrl+G',
+            statusTip='add free comment',
+            triggered=self.freeComment)
 
         self.showQuickAction = QAction(
-                QIcon(''),
-                '&Show Quick Bar',
-                self,
-                shortcut='',
-                statusTip='show the quick bar',
-                triggered=self.showQuick)
+            QIcon(''),
+            '&Show Quick Bar',
+            self,
+            shortcut='',
+            statusTip='show the quick bar',
+            triggered=self.showQuick)
         self.hideQuickAction = QAction(
-                QIcon(''),
-                '&Hide Quick Bar',
-                self,
-                shortcut='',
-                statusTip='hide the quick bar',
-                triggered=self.hideQuick)
+            QIcon(''),
+            '&Hide Quick Bar',
+            self,
+            shortcut='',
+            statusTip='hide the quick bar',
+            triggered=self.hideQuick)
         self.enterFullScreenAction = QAction(
-                QIcon(''),
-                '&Enter Full Screen',
-                self,
-                shortcut='',
-                statusTip='enter full screen',
-                triggered=self.enterFull)
+            QIcon(''),
+            '&Enter Full Screen',
+            self,
+            shortcut='',
+            statusTip='enter full screen',
+            triggered=self.enterFull)
         self.exitFullScreenAction = QAction(
-                QIcon(''),
-                '&Exit Full Screen',
-                self,
-                shortcut='Esc',
-                statusTip='exit full screen',
-                triggered=self.exitFull)
+            QIcon(''),
+            '&Exit Full Screen',
+            self,
+            shortcut='Esc',
+            statusTip='exit full screen',
+            triggered=self.exitFull)
 
     def newGraph(self):
         self.addTab()
@@ -529,8 +530,10 @@ class MainWindow(QMainWindow):
         self.process = QtCore.QProcess(self)
         self.process.readyReadStandardOutput.connect(self.stdoutReady)
         self.process.readyReadStandardError.connect(self.stderrReady)
+        start_time = datetime.now()
         self.process.started.connect(lambda: print('********* Started! **********'))
-        self.process.finished.connect(lambda: print('********** Finished! *********'))
+        self.process.finished.connect(
+            lambda: print('********** Finished! *** Timer: {} *********'.format(datetime.now() - start_time)))
         self.process.start('python', [obj_file, str(config_data)])
 
     def stdoutReady(self):

@@ -97,3 +97,4 @@ if __name__ == '__main__':
 
     instance = GraphRunnerInstance()
     instance.run_graph(graph_config)
+

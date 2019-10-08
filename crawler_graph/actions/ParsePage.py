@@ -1,56 +1,56 @@
+# -*- coding: utf-8 -*-
+"""
+copyright. AIIT
+created by LiQing.
+created by LiQing
+ccontact blacknepia@dingtail.com for more information
+"""
 from runtime.Action import Action
-from lxml.html import etree
+from lxml import html
 
 
-# class Json_loads(Action):
-#     def __call__(self, args, io):
-#         import json
-#         content = args['page_source_str']
-#         result = json.loads(content)
-#         io.set_output('result_str', result)
-#         io.push_event('Out')
-
-
-# class ParsePageSource(Action):
-#     """
-#     解析网页源码，返回字符文档html
-#     """
-#
-#     def __call__(self, args, io):
-#         page_source = args['page_source_str']
-#         html = etree.HTML(page_source)
-#         io.set_output('doc_str', html)
-#         io.push_event('Out')
-
-
-class ExtractSingleField(Action):
-    """
-    通过xpath ，提取一个字段数据,
-    如果一个字段多个数据，返回列表，否则返回一个数据字符
-    """
+class Json_loads(Action):
+    '''将json格式转化为python字符'''
 
     def __call__(self, args, io):
-        page_source = args['page_source_str']
-        rule = args['xpath_str']
-        if not isinstance(page_source, etree._Element):
-            page_source = etree.HTML(page_source)
-        result = page_source.xpath(rule)
-        io.set_output('result_list', result)
+        import json
+        content = args['page_source_str']
+        result = json.loads(content)
+        io.set_output('result_dict', result)
         io.push_event('Out')
 
+    id = 'a1596ee2-e968-11e9-b900-8cec4bd887f3'
 
-class ExtractMultiFields(Action):
-    """通过xpath ，提取多个字段数据"""
+
+class ParseXapth(Action):
+    '''通过xpath ，获取指定字段'''
 
     def __call__(self, args, io):
         page_source = args['page_source_str']
-        rule_dict = args['fields_xpath_dict']
-        if not isinstance(page_source, etree._Element):
-            page_source = etree.HTML(page_source)
+        etree = html.etree
+        tree = etree.HTML(page_source)
+        rule = args['xpath_str']
+        result_dict = tree.xpath(rule)
+        io.set_output('result_list', result_dict)
+        io.push_event('Out')
+
+    id = 'a968661a-e968-11e9-8902-8cec4bd887f3'
+
+
+class Parse_Xath_More(Action):
+    '''通过xpath ，获取多个字段'''
+
+    def __call__(self, args, io):
+        page_source = args['page_source_str']
+        etree = html.etree
+        tree = etree.HTML(page_source)
+        rule_dict = args['doc_dict']
         result_dict = {}
         for key, value in rule_dict.items():
-            values = page_source.xpath(value)
+            values = tree.xpath(value)
             values = ''.join(values)
             result_dict[key] = ''.join(values.split())
         io.set_output('result_dict', result_dict)
         io.push_event('Out')
+
+    id = 'afa2a5ac-e968-11e9-904e-8cec4bd887f3'
