@@ -45,7 +45,7 @@ class Selenium_Acquire_Cookie(Action):
 
 
 class SplashUrl(Action):
-    '''通过Splash Api接口 进行对页面js渲染，获取网页源代码'''
+    """通过Splash Api接口 进行对页面js渲染，获取网页源代码"""
 
     def __init__(self):
 
@@ -80,7 +80,7 @@ class SplashUrl(Action):
 
 
 class AsySplash(Action):
-    '''通过异步Splash渲染页面'''
+    """通过异步Splash渲染页面"""
 
     def __init__(self):
         self.splash_url = "http://10.0.30.10:8050//render.html"

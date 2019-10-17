@@ -37,7 +37,8 @@ class IteratorList(Action):
     """
 
     def __call__(self, args, io):
-        for element in args['doc_list']:
+        doc = args['doc_list']
+        for element in doc:
             io.set_output('item_any', element)
             io.push_event('Out')
 
@@ -58,13 +59,24 @@ class TimeSleep(Action):
 
 
 class IsDictValue(Action):
-    '''判断字典中value是否存在空值'''
+    """判断字典中value是否存在空值"""
 
     def __call__(self, args, io):
-        dict = args['result_dict']
+        dic = args['result_dict']
         key = args['key_str']
-        if dict[key]:
-            io.set_output('result_dict', dict)
+        if dic[key]:
+            io.set_output('result_dict', dic)
             io.push_event('Out')
 
     id = 'd7c80395-e974-11e9-bbed-f416630aacec'
+
+
+class Sequence(Action):
+
+    def __call__(self, args, io):
+        io.push_event('Out1')
+        io.push_event('Out2')
+        io.push_event('Out3')
+        io.push_event('Out4')
+
+    id = 'd7c80395-e974-11e9-bbed-f416630aa111'

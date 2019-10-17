@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from runtime.Action import Action
 from fake_useragent import UserAgent
+from pyppeteer import launch
 import requests
 import aiohttp
 import asyncio
 
 
 class GetRequestPro(Action):
-    '''具有‘阿布云’代理ip接口'''
+    """具有‘阿布云’代理ip接口"""
 
     def __call__(self, args, io):
         headers = {'User-Agent': UserAgent(verify_ssl=False).random}
@@ -57,7 +58,7 @@ class GetRequest(Action):
         url = args['url_str']
         charset = args.get('charset_optional_str', None)  # 可选参数
         cookies = args['cookie_optional_dict']
-        response_type = args.get('resp_type_optional_str')  # 返回的数据类型
+        response_type = args.get('resp_type_optional_str')  # 返回的数据类型text/json/bytes
 
         headers = {'User-Agent': UserAgent(verify_ssl=False).random}
         if cookies: headers.update(cookies)
@@ -80,13 +81,13 @@ class GetRequest(Action):
                 break
             except requests.RequestException as e:
                 tries += 1
-                print('post failed {}: {}'.format(tries, e))
+                print('get failed {}: {}'.format(tries, e))
 
     id = 'e8dc0bb4-e968-11e9-8b25-8cec4bd887f3'
 
 
 class PostRequest(Action):
-    """发送post请求，根据response_type 返回数据类型"""
+    """发送post请求，根据response_type (text, json, bytes) 返回数据类型"""
 
     def __call__(self, args, io):
         url = args['url_str']
@@ -123,7 +124,7 @@ class PostRequest(Action):
 
 
 class CoroutinesRequests(Action):
-    '''通过gevent协程发送requests请求'''
+    """通过gevent协程发送requests请求"""
 
     def __init__(self):
         self.headers = {
@@ -194,7 +195,7 @@ class Asyncop_url(Action):
 
 
 class GetRequestPro_Aiohttp(Action):
-    '''具有‘阿布云’代理ip接口,通过Aiohttp请求方式'''
+    """具有‘阿布云’代理ip接口,通过Aiohttp请求方式"""
 
     def __call__(self, args, io):
         url = args['url_str']
@@ -232,7 +233,7 @@ class GetRequestPro_Aiohttp(Action):
 
 
 class PyQueryUrl(Action):
-    '''通过PyQuery发送请求'''
+    """通过PyQuery发送请求"""
 
     def __call__(self, args, io):
         from pyquery import PyQuery
@@ -258,3 +259,107 @@ class PyQueryUrl(Action):
         io.push_event('Out')
 
     id = '2ea8f46c-e969-11e9-ba99-8cec4bd887f3'
+
+
+class PyppeteerObject(Action):
+    """
+    实例化一个Pyppeteer 的page对象
+    """
+
+    # autoClose = False,
+    async def createobject(self, io, args):
+        executablePath = args['executablePath']
+        broswer = await launch(headless=False, args=['--disable-infobars'], executablePath=executablePath)
+        io.set_output('broswer_str', broswer)
+        page = await broswer.newPage()
+        return page
+
+    def __call__(self, args, io):
+        try:
+            page = asyncio.get_event_loop().run_until_complete(
+                self.createobject(io, args))
+            io.set_output('page_str', page)
+            io.push_event('Out')
+        except Exception as e:
+            print(e)
+
+    id = 'cdc4cbba-eb00-11e9-943e-8cec4bd887f3'
+
+
+class PyppeteerGoto(Action):
+    """
+    通过pyppeteer的page对象模拟打开一个网页
+    """
+
+    async def pagegoto(self, args, io):
+        page = args['page_str']
+        login_url = args['login_url']
+        await page.setUserAgent(UserAgent(verify_ssl=False).random)
+        await page.goto(login_url)
+        # await page.waitForNavigation()
+        # await asyncio.sleep(1)
+        io.set_output('page_str', page)
+
+    def __call__(self, args, io):
+        asyncio.get_event_loop().run_until_complete(
+            self.pagegoto(args, io))
+        io.push_event('Out')
+
+    id = 'd54c3a66-eb00-11e9-b459-8cec4bd887f3'
+
+
+class SessionSetcookie(Action):
+    """建立session会话机制
+   会话机制中可添加cookie
+        保存会话机制"""
+
+    def __call__(self, args, io):
+        cookies = args['cookies_list']
+        import requests
+        ss = requests.session()
+        if cookies:
+            for cookie in cookies:
+                ss.cookies.set(cookie['name'], cookie['value'])
+        io.set_output('ss_str', ss)
+        io.push_event('Out')
+
+    id = '56bacec0-ec08-11e9-b289-8cec4bd887f3'
+
+
+class SessionGeturl(Action):
+    """通过session会话机制，
+    对登录后的页面进行访问"""
+
+    def __call__(self, args, io):
+        ss = args['ss_str']
+        headers = {'User-Agent': UserAgent(verify_ssl=False).random}
+        url = args['url_str']
+        data = args['data_dict']
+        if data:
+            response = ss.get(url, headers=headers, params=data)
+        else:
+            response = ss.get(url, headers=headers)
+        content = response.text
+        io.set_output('ss_str', ss)
+        io.set_output('content_str', content)
+        io.push_event('Out')
+
+    id = '5c7bd658-ec08-11e9-aa5f-8cec4bd887f3'
+
+
+class SessionPosturl(Action):
+    """
+    通过sessionhuihuajizhi，发post请求
+    """
+
+    def __call__(self, args, io):
+        ss = args['ss_str']
+        headers = {'User-Agent': UserAgent(verify_ssl=False).random}
+        url = args['url_str']
+        data = args['data_dict']
+        response = ss.post(url, headers=headers, params=data)
+        io.set_output('ss_str', ss)
+        io.set_output('content_str', response.text)
+        io.push_event('Out')
+
+    id = 'c4db4bac-ee1e-11e9-8875-8cec4bd887f3'

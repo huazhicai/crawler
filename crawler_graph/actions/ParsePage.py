@@ -9,8 +9,8 @@ from runtime.Action import Action
 from lxml import html
 
 
-class Json_loads(Action):
-    '''将json格式转化为python字符'''
+class JsonLoads(Action):
+    """将json格式转化为python字符"""
 
     def __call__(self, args, io):
         import json
@@ -22,8 +22,8 @@ class Json_loads(Action):
     id = 'a1596ee2-e968-11e9-b900-8cec4bd887f3'
 
 
-class ParseXapth(Action):
-    '''通过xpath ，获取指定字段'''
+class ParseXpath(Action):
+    """通过xpath ，获取指定字段"""
 
     def __call__(self, args, io):
         page_source = args['page_source_str']
@@ -38,7 +38,7 @@ class ParseXapth(Action):
 
 
 class Parse_Xath_More(Action):
-    '''通过xpath ，获取多个字段'''
+    """通过xpath ，获取多个字段"""
 
     def __call__(self, args, io):
         page_source = args['page_source_str']

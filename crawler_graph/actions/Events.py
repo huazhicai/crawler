@@ -9,6 +9,7 @@ from runtime.Action import Action
 
 
 class Start(Action):
-    id = '53116498-e968-11e9-b251-8cec4bd887f3'
+    id = '9ed37096-bc78-47c9-b0d0-44fef1f8002d'
+
     def __call__(self, args, io):
         io.push_event('Out')

@@ -10,13 +10,13 @@ from runtime.Action import Action
 
 
 class ReExtract(Action):
-    '''正则获取指定元素'''
+    """正则获取指定元素"""
 
     def __call__(self, args, io):
         import re
-        object = args['string_str']
+        obj = args['string_str']
         rule = args['re_pattern_str']
-        result = re.findall(rule, object)
+        result = re.findall(rule, obj)
         result = ''.join(result)
         io.set_output('result_str', result)
         io.push_event('Out')
@@ -25,7 +25,7 @@ class ReExtract(Action):
 
 
 class IterationJoint(Action):
-    '''遍历列表，拼接字符串'''
+    """遍历列表，拼接字符串"""
 
     def __call__(self, args, io):
         prefix = args['prefix_str']
@@ -48,7 +48,7 @@ class IterationJoint(Action):
 
 
 class ListIndex(Action):
-    '''选取列表中直接下表元素'''
+    """选取列表中直接下表元素"""
 
     def __call__(self, args, io):
         index = args['index_str']
@@ -61,7 +61,7 @@ class ListIndex(Action):
 
 
 class SplitString(Action):
-    ''' 按指定字符切割字符串并获取指定区间'''
+    """ 按指定字符切割字符串并获取指定区间"""
 
     def __call__(self, args, io):
         string = args['response_str']
@@ -85,7 +85,7 @@ class SplitString(Action):
 
 
 class StripString(Action):
-    ''' 删除字符串中指定元素'''
+    """删除字符串中指定元素"""
 
     def __call__(self, args, io):
         string = args['response_str']
@@ -98,21 +98,21 @@ class StripString(Action):
 
 
 class AddDict(Action):
-    ''' 向字典中添加键值对'''
+    """ 向字典中添加键值对"""
 
     def __call__(self, args, io):
         key = args['key_any']
         value = args['value_any']
-        dict = args['doc_dict']
-        dict[key] = value
-        io.set_output('result_dict', dict)
+        dic = args['doc_dict']
+        dic[key] = value
+        io.set_output('result_dict', dic)
         io.push_event('Out')
 
     id = 'f5a77602-e967-11e9-8b5f-8cec4bd887f3'
 
 
 class AddingDict(Action):
-    '''# 字典相加'''
+    """字典相加"""
 
     def __call__(self, args, io):
         dict_one = args['doc1_dict']
@@ -125,14 +125,14 @@ class AddingDict(Action):
 
 
 class JointDict(Action):
-    '''# 组成字典'''
+    """组成字典"""
 
     def __call__(self, args, io):
         key = args['key_any']
         value = args['value_any']
-        dict = {}
-        dict[key] = value
-        io.set_output('result_dict', dict)
+        dic = {}
+        dic[key] = value
+        io.set_output('result_dict', dic)
         io.push_event('Out')
 
     id = '0634379c-e968-11e9-b579-8cec4bd887f3'
@@ -153,70 +153,68 @@ class MergeDict(Action):
 
 
 class GetValueDict(Action):
-    '''已知Key  从字典中获取Value'''
+    """已知Key  从字典中获取Value"""
 
     def __call__(self, args, io):
-        dict = args['doc_dict']
-        io.set_output('value_any', dict[args['key_any']])
+        dic = args['doc_dict']
+        io.set_output('value_any', dic[args['key_any']])
         io.push_event('Out')
 
     id = '12166c3a-e968-11e9-a718-8cec4bd887f3'
 
 
 class CleaningList(Action):
-    '''去除字典中value[value为列表]中的 \t \n,'''
+    """去除字典中value[value为列表]中的 \t \n,"""
 
     def __call__(self, args, io):
-        dict = args['doc_dict']
-        for key, vule in dict.items():
-            vule = ''.join(vule)
-            vule = ' '.join(vule.split())
-            dict[key] = vule
-        io.set_output('result_dict', dict)
+        dic = args['doc_dict']
+        for key, value in dic.items():
+            value = ''.join(value)
+            value = ' '.join(value.split())
+            dic[key] = value
+        io.set_output('result_dict', dic)
         io.push_event('Out')
 
     id = '91f5ecd4-e9a3-11e9-9b9e-f416630aacec'
 
 
-class FillupInfor(Action):
-    '''当dict中value为空时，补充信息'''
+class FillUpInfor(Action):
+    """当dict中value为空时，补充信息"""
 
     def __call__(self, args, io):
-        dict = args['doc_dict']
-        for key, vule in dict.items():
+        dic = args['doc_dict']
+        for key, vule in dic.items():
             if len(vule) == 0:
-                dict[key] = '信息不详'
-        io.set_output('result_dict', dict)
+                dic[key] = '信息不详'
+        io.set_output('result_dict', dic)
         io.push_event('Out')
 
     id = '7c429c80-e9a3-11e9-962f-f416630aacec'
 
 
-"""
-如果多个字段在一个标签中，用正则截取多个字段，对内容的提取
-对value中字符串进行正则匹配
-"""
-
-
 class InterceptionText(Action):
+    """
+    如果多个字段在一个标签中，用正则截取多个字段，对内容的提取
+    对value中字符串进行正则匹配
+    """
 
     def __call__(self, args, io):
         import re
-        dict = args['doc1_dict']
-        Rule_dict = args['doc2_dict']
-        for key, value in Rule_dict.items():
-            if key in dict.keys():
-                con = re.findall(value, dict[key])
+        dic = args['doc1_dict']
+        rule_dict = args['doc2_dict']
+        for key, value in rule_dict.items():
+            if key in dic.keys():
+                con = re.findall(value, dic[key])
                 con = ''.join(con).strip(' ')
-                dict[key] = con
+                dic[key] = con
 
-        io.set_output('result_dict', dict)
+        io.set_output('result_dict', dic)
         io.push_event('Out')
 
     id = '19bd24ee-e968-11e9-b671-8cec4bd887f3'
 
 
-class StringContcat(Action):
+class StringContact(Action):
     """
     单个字符串拼接
     """
@@ -229,3 +227,13 @@ class StringContcat(Action):
         io.push_event('Out')
 
     id = '321dfffa-e968-11e9-b5c3-8cec4bd887f3'
+
+
+class GetExternalVarStr(Action):
+
+    def __call__(self, args, io):
+        key = args['key_str']
+        value = io.get_external_var(key)
+        io.set_output('value_str', str(value))
+
+    id = 'aa739124-289e-452d-a593-485ed88d3206'
