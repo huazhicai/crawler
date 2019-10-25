@@ -1,0 +1,104 @@
+{
+    "scene": {
+        "width": 10000.0,
+        "height": 10000.0
+    },
+    "nodes": [
+        {
+            "id": "5a6a8216-4d03-4792-87b1-ac786905c592",
+            "type": "9ed37096-bc78-47c9-b0d0-44fef1f8002d",
+            "pos": {
+                "x": -429.0,
+                "y": -242.0
+            },
+            "deltaWidth": 0,
+            "args": {}
+        },
+        {
+            "id": "03626dc9-c95f-43e8-a4be-76c73045fa0e",
+            "type": "94ca1b06-e967-11e9-9ff5-8cec4bd887f3",
+            "pos": {
+                "x": -67.0,
+                "y": -323.0
+            },
+            "deltaWidth": 20,
+            "args": {
+                "e725c148-e9a4-11e9-bfaa-f41663055cec": "\u4f60\u597d"
+            }
+        }
+    ],
+    "edges": [
+        {
+            "start": "5a6a8216-4d03-4792-87b1-ac786905c592",
+            "startNodeName": "Start",
+            "end": "03626dc9-c95f-43e8-a4be-76c73045fa0e",
+            "endNodeName": "ConsoleOutput",
+            "startItemId": "a9f4fe1f-00b9-413c-a332-f98ef6327465",
+            "startItemName": "Out",
+            "endItemId": "e725c14a-e9a4-11e9-8652-f416630aacec",
+            "endItemName": "In",
+            "linktype": "Event"
+        }
+    ],
+    "comments": [],
+    "meta": [
+        {
+            "category": "Event",
+            "returns": [
+                {
+                    "type": "Event",
+                    "name": [
+                        "Out",
+                        "a9f4fe1f-00b9-413c-a332-f98ef6327465"
+                    ]
+                }
+            ],
+            "args": [
+                {
+                    "type": "Event",
+                    "name": [
+                        "Default",
+                        "5168e336-f2c3-4abc-b117-6a64dd860dff"
+                    ],
+                    "action": "Start"
+                }
+            ],
+            "name": [
+                "Start",
+                "9ed37096-bc78-47c9-b0d0-44fef1f8002d"
+            ]
+        },
+        {
+            "category": "DataOutput",
+            "name": [
+                "ConsoleOutput",
+                "94ca1b06-e967-11e9-9ff5-8cec4bd887f3"
+            ],
+            "args": [
+                {
+                    "type": "String",
+                    "name": [
+                        "prefix_optional_str",
+                        "e725c148-e9a4-11e9-bfaa-f41663055cec"
+                    ]
+                },
+                {
+                    "type": "Any",
+                    "name": [
+                        "result_any",
+                        "e725c149-e9a4-11e9-a2c0-f416630aacec"
+                    ]
+                },
+                {
+                    "type": "Event",
+                    "name": [
+                        "In",
+                        "e725c14a-e9a4-11e9-8652-f416630aacec"
+                    ],
+                    "action": "ConsoleOutput"
+                }
+            ],
+            "returns": []
+        }
+    ]
+}

@@ -1,1 +1,0 @@
-{'nodes': [{'event_actions': {'Default': 'Start'}, 'event_links': {'Out': {1: 'In'}}, 'inputs': {}, 'outputs': {}}, {'event_actions': {'In': 'ConsoleOutput'}, 'event_links': {}, 'inputs': {'prefix_optional_str': 0, 'result_any': 1}, 'outputs': {}}], 'runtime_data': ['Hello World', None], 'roots': [0]}
