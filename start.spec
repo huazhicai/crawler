@@ -12,6 +12,7 @@ a = Analysis(['start.py',
                 base_dir+'editor\\ActivityScriptExporter.py',
                 base_dir+'editor\\graphics.py',
 
+                base_dir+'crawler_graph\\run.py',
                 base_dir+'crawler_graph\\actions\\DataOutput.py',
                 base_dir+'crawler_graph\\actions\\Others.py',
                 base_dir+'crawler_graph\\actions\\Request.py',

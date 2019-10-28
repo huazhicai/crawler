@@ -4,23 +4,18 @@ import os
 import subprocess
 import threading
 
-sys.path.append(os.path.dirname(__file__))
-
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from datetime import datetime
 
+sys.path.append(os.path.dirname(__file__))
 import widgets
-from crawler_graph import crawler
 from dlg import ResizeSceneDialog, SaveQuestionDialog, OverrideDialog
 import mutil
 import data
 from font import FontManager
 from version import buildDate, version
 from A_Exporter import single_file_export
-
-exec('from crawler_graph.crawler import crawl')
 
 
 def resource_path(relative_path):
@@ -525,17 +520,21 @@ class MainWindow(QMainWindow):
             return
         data = graphWidget.runGraph()
         config_data = single_file_export(data)
-        obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'crawler.py')
-        # obj_file = resource_path(obj_file)
 
         # 开启爬虫子线程
+        all_actions = {}
+        exec('from crawler_graph.run import crawl', all_actions)
+        # from crawler_graph.crawler import crawl
         try:
-            thread_ = threading.Thread(target=crawl, args=(config_data,))
+            thread_ = threading.Thread(target=all_actions['crawl'], args=(config_data,))
             thread_.start()
         except Exception as e:
             print(f'Crawler Error: {e}')
 
         # 开启爬虫子进程
+
+    #     obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'crawler.py')
+    #     obj_file = resource_path(obj_file)
 
     #     self.process = QtCore.QProcess(self)
     #     self.process.readyReadStandardOutput.connect(self.stdoutReady)
@@ -1075,5 +1074,5 @@ def getScriptMode():
         return None
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

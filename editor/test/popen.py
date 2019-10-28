@@ -33,7 +33,7 @@ config_data = {
                      '/html/body/div[5]/div[2]/div/div[2]/div[1]/div[1]/text()'], 'roots': [0]}
 
 
-obj_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'crawler_graph', 'start.py')
+obj_file = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'crawler_graph', 'run.py')
 # print(obj_file)
 proc = subprocess.Popen(["python3", obj_file, str(config_data)], shell=True, stdout=subprocess.PIPE)
 # try:

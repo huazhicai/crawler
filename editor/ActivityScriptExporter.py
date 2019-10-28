@@ -1252,40 +1252,40 @@ def editor_validate_and_export(defData, editorData, filename, resPath):
     return result
 
 
-if __name__ == '__main__':
-    import sys
-    import os
-    import json
-
-    if len(sys.argv) == 4:
-        nodeDefFilepath = sys.argv[1]
-        editorFilepath = sys.argv[2]
-        resPath = sys.argv[3]
-
-        defData = json.loads(open(nodeDefFilepath, 'r').read())
-        editorData = json.loads(open(editorFilepath, 'r').read())
-
-        result = single_file_export(defData, editorData, False, os.path.basename(nodeDefFilepath).split('.')[0],
-                                    resPath)
-
-        print('data = ', end=' ')
-        print(repr(result))
-
-    elif len(sys.argv) == 5:
-        multi_file_export_mode()
-    else:
-        nodeDefFilepath = 'E:\\PycharmProjects\\crawler\\editor\meta\\nodes.json'
-        editorFilepath = 'E:\\PycharmProjects\\crawler\\editor\\graph\\temp.json'
-        # resPath = 'F:/H43/trunk/Client_Resources/res'
-        defData = json.loads(open(nodeDefFilepath, 'r').read())
-        editorData = json.loads(open(editorFilepath, 'r').read())
-
-        # scriptType = guess_script_type(editorFilepath, editorData)
-
-        result = single_file_export(defData, editorData, False, os.path.basename(nodeDefFilepath).split('.')[0])
-
-        print('data = ', end=' ')
-        print(repr(result))
-        # raise NotImplementedError("wrong args")
-
-    sys.exit(0)
+# if __name__ == '__main__':
+#     import sys
+#     import os
+#     import json
+#
+#     if len(sys.argv) == 4:
+#         nodeDefFilepath = sys.argv[1]
+#         editorFilepath = sys.argv[2]
+#         resPath = sys.argv[3]
+#
+#         defData = json.loads(open(nodeDefFilepath, 'r').read())
+#         editorData = json.loads(open(editorFilepath, 'r').read())
+#
+#         result = single_file_export(defData, editorData, False, os.path.basename(nodeDefFilepath).split('.')[0],
+#                                     resPath)
+#
+#         print('data = ', end=' ')
+#         print(repr(result))
+#
+#     elif len(sys.argv) == 5:
+#         multi_file_export_mode()
+#     else:
+#         nodeDefFilepath = 'E:\\PycharmProjects\\crawler\\editor\meta\\nodes.json'
+#         editorFilepath = 'E:\\PycharmProjects\\crawler\\editor\\graph\\temp.json'
+#         # resPath = 'F:/H43/trunk/Client_Resources/res'
+#         defData = json.loads(open(nodeDefFilepath, 'r').read())
+#         editorData = json.loads(open(editorFilepath, 'r').read())
+#
+#         # scriptType = guess_script_type(editorFilepath, editorData)
+#
+#         result = single_file_export(defData, editorData, False, os.path.basename(nodeDefFilepath).split('.')[0])
+#
+#         print('data = ', end=' ')
+#         print(repr(result))
+#         # raise NotImplementedError("wrong args")
+#
+#     sys.exit(0)

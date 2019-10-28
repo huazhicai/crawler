@@ -67,6 +67,9 @@
   ('graphics',
    'E:\\PycharmProjects\\crawler\\crawler\\editor\\graphics.py',
    'PYSOURCE'),
+  ('run',
+   'E:\\PycharmProjects\\crawler\\crawler\\crawler_graph\\run.py',
+   'PYSOURCE'),
   ('DataOutput',
    'E:\\PycharmProjects\\crawler\\crawler\\crawler_graph\\actions\\DataOutput.py',
    'PYSOURCE'),
@@ -85,7 +88,7 @@
  [],
  False,
  False,
- 1572004652,
+ 1572247172,
  [('run.exe',
    'c:\\users\\dell\\.conda\\envs\\python36\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-32bit\\run.exe',
    'EXECUTABLE')])

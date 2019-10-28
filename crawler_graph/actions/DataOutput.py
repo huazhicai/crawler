@@ -18,7 +18,6 @@ class ConsoleOutput(Action):
     """屏幕输出打印信息"""
 
     def __call__(self, args, io):
-
         prefix = args.get('prefix_optional_str', None)
         result = args['result_any']
         if prefix:
