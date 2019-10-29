@@ -2,9 +2,8 @@
 import sys
 import os
 import subprocess
-import threading
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QThread
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
@@ -521,18 +520,21 @@ class MainWindow(QMainWindow):
         data = graphWidget.runGraph()
         config_data = single_file_export(data)
 
-        # 开启爬虫子线程
-        all_actions = {}
-        exec('from crawler_graph.run import crawl', all_actions)
-        # from crawler_graph.crawler import crawl
+        # self.thread = CrawlThread(config_data)  # 创建线程
+        # self.thread.started.connect(lambda: print('=========== Starting Crawl =========='))
+        # self.thread.start()
+        # self.thread.finished.connect(lambda: print("============ Done ================"))
+
+        # 开启爬虫子
+        from crawler_graph.run import crawl
+        import multiprocessing
         try:
-            thread_ = threading.Thread(target=all_actions['crawl'], args=(config_data,))
-            thread_.start()
+            process = multiprocessing.Process(target=crawl, args=(config_data,))
+            process.start()
         except Exception as e:
             print(f'Crawler Error: {e}')
 
         # 开启爬虫子进程
-
     #     obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'crawler.py')
     #     obj_file = resource_path(obj_file)
 

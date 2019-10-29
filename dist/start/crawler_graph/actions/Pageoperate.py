@@ -4,9 +4,9 @@ import asyncio
 
 
 class Pagetype(Action):
-    """
+    '''
     通过pyppeteer的page对象 找到输入框并输入文本
-    """
+    '''
 
     async def pagetype(self, args, io):
         await asyncio.sleep(1)
@@ -19,7 +19,6 @@ class Pagetype(Action):
         io.set_output('page_str', page)
 
     def __call__(self, args, io):
-
         asyncio.get_event_loop().run_until_complete(
             self.pagetype(args, io))
 
@@ -29,39 +28,39 @@ class Pagetype(Action):
 
 
 class Pageclick(Action):
-    """
+    '''
     通过pyppeteer的page对象 找到输入框并输入文本
-    """
+    '''
 
-    async def pagetype(self, args, io):
+    async def pagetype(self, args, io,isurlchange):
         page = args['page_str']
         click_css = args['click_css_str']
         while not await page.querySelector(click_css):
             pass
-        try:
+        if isurlchange == 'yes':
             await asyncio.gather(
                 page.click(click_css),
                 page.waitForNavigation(),
             )
-        except:
+        else:
             await page.click(click_css)
-            await asyncio.sleep(1)
-
+            await asyncio.sleep(2)
         io.set_output('page_str', page)
 
     def __call__(self, args, io):
-        print('----')
+        isurlchange = args['yes_or_no_str']
+        '''判断 click()是否会触发网页跳转'''
         asyncio.get_event_loop().run_until_complete(
-            self.pagetype(args, io))
+            self.pagetype(args, io,isurlchange))
         io.push_event('Out')
 
     id = 'd84b0266-ebc9-11e9-a303-8cec4bd887f3'
 
 
 class Pagecookie(Action):
-    """
+    '''
     通过page登录后，获取当前登录页面的cookie值
-    """
+    '''
 
     async def pagecookie(self, args, io):
         page = args['page_str']
@@ -80,9 +79,9 @@ class Pagecookie(Action):
 
 
 class Pagecontent(Action):
-    """
+    '''
     通过page，获取页面源代码
-    """
+    '''
 
     async def pagecontent(self, args, io):
         page = args['page_str']
@@ -98,9 +97,9 @@ class Pagecontent(Action):
 
 
 class Pagepulldown(Action):
-    """
+    '''
     通过page，将页面滚动到页面底部
-    """
+    '''
 
     async def pagepulldown(self, args, io):
         page = args['page_str']
@@ -116,14 +115,17 @@ class Pagepulldown(Action):
     id = '484da1a2-ebef-11e9-898d-8cec4bd887f3'
 
 
-class PageClose(Action):
+class Pageclose(Action):
 
     async def pageclose(self, args):
         page = args['broswer_str']
         await page.close()
+
 
     def __call__(self, args, io):
         asyncio.get_event_loop().run_until_complete(
             self.pageclose(args))
 
     id = 'effc5424-ec0c-11e9-921c-8cec4bd887f3'
+
+

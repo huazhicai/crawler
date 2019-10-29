@@ -79,3 +79,17 @@ class Sequence(Action):
         io.push_event('Out4')
 
     id = 'd7c80395-e974-11e9-bbed-f416630aa111'
+
+
+class Islist(Action):
+    '''列表不为空，节点继续进行'''
+    def __call__(self, args, io):
+        doc = args['doc_list']
+        if doc :
+            io.set_output('result_list',doc)
+            io.push_event('Out')
+        else:
+            '''但列表为空时，节点不需要继续经行，输出提示语reminder'''
+            reminder = args['reminder_any']
+            print(reminder)
+    id = 'baf04774-f954-11e9-862e-8cec4bd887f3'

@@ -36,7 +36,7 @@
                 "type": "String",
                 "name": [
                     "prefix_optional_str",
-                    "e725c148-e9a4-11e9-bfaa-f416630aacec"
+                    "e725c148-e9a4-11e9-bfaa-f41663055cec"
                 ]
             },
             {
@@ -67,8 +67,8 @@
             {
                 "type": "Any",
                 "name": [
-                    "Data_any",
-                    "e725c14b-e9a4-11e9-907b-f416630aacec"
+                    "data_any",
+                    "deedd4f6-f983-11e9-b68f-8cec4bd83f9f"
                 ]
             },
             {
@@ -84,8 +84,8 @@
             {
                 "type": "Any",
                 "name": [
-                    "Data_any",
-                    "e725e83e-e9a4-11e9-a082-f416630aacec"
+                    "data_any",
+                    "deedd4f8-f983-11e9-af92-8cec4bd83f9f"
                 ]
             }
         ]
@@ -335,6 +335,52 @@
                 ]
             }
         ]
+    },
+    {
+        "category": "DataOutput",
+        "name": [
+            "WithOpenTxt",
+            "9246b900-f3a1-11e9-86df-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Any",
+                "name": [
+                    "data_any",
+                    "deedd514-f983-11e9-8c47-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "file_name_str",
+                    "deedd515-f983-11e9-b76e-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "write_way_str",
+                    "deedd516-f983-11e9-878d-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "encoding_str",
+                    "deedd517-f983-11e9-90e7-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deedd518-f983-11e9-a06d-8cec4bd83f9f"
+                ],
+                "action": "WithOpenTxt"
+            }
+        ],
+        "returns": []
     },
     {
         "category": "DataProcess",
@@ -877,7 +923,7 @@
     {
         "category": "DataProcess",
         "name": [
-            "FillupInfor",
+            "FillUpInfor",
             "7c429c80-e9a3-11e9-962f-f416630aacec"
         ],
         "args": [
@@ -894,7 +940,7 @@
                     "In",
                     "e725e892-e9a4-11e9-9d20-f416630aacec"
                 ],
-                "action": "FillupInfor"
+                "action": "FillUpInfor"
             }
         ],
         "returns": [
@@ -964,7 +1010,7 @@
     {
         "category": "DataProcess",
         "name": [
-            "StringContcat",
+            "StringContact",
             "321dfffa-e968-11e9-b5c3-8cec4bd887f3"
         ],
         "args": [
@@ -988,7 +1034,7 @@
                     "In",
                     "e7260f3a-e9a4-11e9-82b4-f416630aacec"
                 ],
-                "action": "StringContcat"
+                "action": "StringContact"
             }
         ],
         "returns": [
@@ -1038,12 +1084,59 @@
                     "value_str",
                     "5c8190a2-ee5a-11e9-b3ef-00d86174affd"
                 ]
+            }
+        ]
+    },
+    {
+        "category": "DataProcess",
+        "name": [
+            "CumulativeDcit",
+            "8232d950-f4aa-11e9-83ab-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Dict",
+                "name": [
+                    "doc_dict",
+                    "deedfbff-f983-11e9-9ae4-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "url_str",
+                    "deedfc00-f983-11e9-9074-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "distinguish_str",
+                    "deedfc01-f983-11e9-9da5-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deedfc02-f983-11e9-9f70-8cec4bd83f9f"
+                ],
+                "action": "CumulativeDcit"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Any",
+                "name": [
+                    "dict_new",
+                    "deedfc03-f983-11e9-a4e0-8cec4bd83f9f"
+                ]
             },
             {
                 "type": "Event",
                 "name": [
                     "Out",
-                    "fbf95102-efe6-11e9-a1f0-f416630aacec"
+                    "deedfc04-f983-11e9-9257-8cec4bd83f9f"
                 ]
             }
         ]
@@ -1051,7 +1144,7 @@
     {
         "category": "Exclusive",
         "name": [
-            "Url_joint",
+            "UrlJoint",
             "76fc0440-e968-11e9-952a-8cec4bd887f3"
         ],
         "args": [
@@ -1082,7 +1175,7 @@
                     "In",
                     "e7260f40-e9a4-11e9-bc41-f416630aacec"
                 ],
-                "action": "Url_joint"
+                "action": "UrlJoint"
             }
         ],
         "returns": [
@@ -1105,7 +1198,7 @@
     {
         "category": "Exclusive",
         "name": [
-            "Ckdxpath",
+            "CkdXpath",
             "d65c8ed8-ec93-11e9-9106-8cec4bd887f3"
         ],
         "args": [
@@ -1115,7 +1208,7 @@
                     "In",
                     "64db10cb-ec94-11e9-91f8-8cec4bd887f3"
                 ],
-                "action": "Ckdxpath"
+                "action": "CkdXpath"
             }
         ],
         "returns": [
@@ -1178,6 +1271,206 @@
                 "name": [
                     "Out",
                     "f9b2c168-ee2f-11e9-b626-8cec4bd887f3"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Exclusive",
+        "name": [
+            "InHosxpath",
+            "8ce0e1d2-f3e9-11e9-be00-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deedfc13-f983-11e9-91c6-8cec4bd83f9f"
+                ],
+                "action": "InHosxpath"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Dict",
+                "name": [
+                    "xpath_dict",
+                    "deedfc14-f983-11e9-a268-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee22de-f983-11e9-a311-8cec4bd83f9f"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Exclusive",
+        "name": [
+            "OutHosxpath",
+            "e622f512-f3e9-11e9-9c40-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deee22df-f983-11e9-bfaa-8cec4bd83f9f"
+                ],
+                "action": "OutHosxpath"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Dict",
+                "name": [
+                    "xpath_dict",
+                    "deee22e0-f983-11e9-80f6-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee22e1-f983-11e9-826b-8cec4bd83f9f"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Exclusive",
+        "name": [
+            "StandingOrderxpath",
+            "2f96e41c-f467-11e9-bd94-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deee22e2-f983-11e9-bb2b-8cec4bd83f9f"
+                ],
+                "action": "StandingOrderxpath"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Dict",
+                "name": [
+                    "xpath_dict",
+                    "deee22e3-f983-11e9-bb63-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee22e4-f983-11e9-83a9-8cec4bd83f9f"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Exclusive",
+        "name": [
+            "ProgressNotexpath",
+            "00b7db9c-f468-11e9-8c34-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deee22e5-f983-11e9-b76f-8cec4bd83f9f"
+                ],
+                "action": "ProgressNotexpath"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Dict",
+                "name": [
+                    "xpath_dict",
+                    "deee22e6-f983-11e9-b3e9-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee22e7-f983-11e9-8096-8cec4bd83f9f"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "Exclusive",
+        "name": [
+            "Reportxpath",
+            "29cf0600-f477-11e9-8b14-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "String",
+                "name": [
+                    "url_str",
+                    "deee22e8-f983-11e9-8a35-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "paraames_one_str",
+                    "deee22e9-f983-11e9-965b-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "paraames_two_str",
+                    "deee22ea-f983-11e9-a0fa-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "paraames_three_str",
+                    "deee22eb-f983-11e9-9605-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "String",
+                "name": [
+                    "paraames_four_str",
+                    "deee22ec-f983-11e9-846b-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deee22ed-f983-11e9-9fae-8cec4bd83f9f"
+                ],
+                "action": "Reportxpath"
+            }
+        ],
+        "returns": [
+            {
+                "type": "Dict",
+                "name": [
+                    "xpath_dict",
+                    "deee22ee-f983-11e9-b692-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee22ef-f983-11e9-a85c-8cec4bd83f9f"
                 ]
             }
         ]
@@ -1413,6 +1706,53 @@
                 "name": [
                     "Out4",
                     "fbf977e0-efe6-11e9-9896-f416630aacec"
+                ]
+            }
+        ]
+    },
+    {
+        "category": "FlowControl",
+        "name": [
+            "Islist",
+            "baf04774-f954-11e9-862e-8cec4bd887f3"
+        ],
+        "args": [
+            {
+                "type": "List",
+                "name": [
+                    "doc_list",
+                    "deee2309-f983-11e9-abd1-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Any",
+                "name": [
+                    "reminder_any",
+                    "deee230a-f983-11e9-a5d2-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "In",
+                    "deee230b-f983-11e9-9a02-8cec4bd83f9f"
+                ],
+                "action": "Islist"
+            }
+        ],
+        "returns": [
+            {
+                "type": "List",
+                "name": [
+                    "result_list",
+                    "deee230c-f983-11e9-bede-8cec4bd83f9f"
+                ]
+            },
+            {
+                "type": "Event",
+                "name": [
+                    "Out",
+                    "deee230d-f983-11e9-ad68-8cec4bd83f9f"
                 ]
             }
         ]
@@ -1704,6 +2044,13 @@
                 ]
             },
             {
+                "type": "String",
+                "name": [
+                    "yes_or_no_str",
+                    "deee49df-f983-11e9-a02e-8cec4bd83f9f"
+                ]
+            },
+            {
                 "type": "Event",
                 "name": [
                     "In",
@@ -1884,7 +2231,7 @@
     {
         "category": "ParsePage",
         "name": [
-            "Json_loads",
+            "JsonLoads",
             "a1596ee2-e968-11e9-b900-8cec4bd887f3"
         ],
         "args": [
@@ -1901,7 +2248,7 @@
                     "In",
                     "e7263629-e9a4-11e9-b6b7-f416630aacec"
                 ],
-                "action": "Json_loads"
+                "action": "JsonLoads"
             }
         ],
         "returns": [
@@ -1924,7 +2271,7 @@
     {
         "category": "ParsePage",
         "name": [
-            "ParseXapth",
+            "ParseXpath",
             "a968661a-e968-11e9-8902-8cec4bd887f3"
         ],
         "args": [
@@ -1948,7 +2295,7 @@
                     "In",
                     "e726362e-e9a4-11e9-8361-f416630aacec"
                 ],
-                "action": "ParseXapth"
+                "action": "ParseXpath"
             }
         ],
         "returns": [

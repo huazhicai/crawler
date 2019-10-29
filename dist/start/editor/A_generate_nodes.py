@@ -9,6 +9,7 @@ import re
 from pprint import pprint
 from uuid import uuid1, UUID
 
+
 ACTIONS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'actions')
 
 
@@ -37,23 +38,22 @@ class GenerateNodes(object):
     def check_node_id(self, name_id):
         assert name_id not in self.uuidSet, f'duplicate uuid: {name_id}'
         try:
-            assert UUID(name_id, version=4)
+            assert UUID(name_id, version=4), 'invalid %s' % name_id
         except Exception:
-            print(name_id)
-            raise
+            assert False, name_id
         self.uuidSet.add(name_id)
 
     def get_class_node(self):
         for c in os.listdir(ACTIONS_DIR):
-            if c.find('generate_nodes') == -1 and c.endswith('.py') and c.find("Events") == -1:
+            if c.endswith('.py') and c.find("Events") == -1:
 
                 result = self.read_file(os.path.join(ACTIONS_DIR, c))
-                pattern = r"\nclass.*?\tid *= *.+?[\'\"]"
+                pattern = r'\nclass.*?id =.*?\n'
                 actions = re.findall(pattern, result, re.S)
                 category = c.strip('.py')
                 for item in actions:
                     # pprint(item)
-                    name_id = re.search(r'id *= *[\'\"](.*?)[\'\"]', item).group(1)
+                    name_id = re.search(r'id = \'(.*?)\'', item).group(1)
                     self.check_node_id(name_id)
                     name = [re.search(r'class\s(.*?)\(', item).group(1), name_id]
                     args_ = re.findall(r'= args.*?\'(.+?)\'', item)

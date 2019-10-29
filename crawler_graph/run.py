@@ -2,7 +2,6 @@
 import json
 import os, sys
 from editor import main
-from editor.A_Exporter import single_file_export
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -19,19 +18,18 @@ def read_graph_file(file):
     return data
 
 
-def run():
-    print(sys.argv)
-    if len(sys.argv) < 2:
+def run(argv):
+
+    if len(argv) < 2:
         main.main()
     else:
-        # func = {}
-        # exec('from crawler_graph.crawler import crawl', func)
-        filename = sys.argv[1]
+        filename = argv[1]
         data = read_graph_file(filename)
+        from editor.A_Exporter import single_file_export
         graph_config = single_file_export(data)
         args = {}
-        if len(sys.argv) > 2:
-            values = sys.argv[2].strip(' {}').split(',')
+        if len(argv) > 2:
+            values = argv[2].strip(' {}').split(',')
             for item in values:
                 k, v = item.split(':')
                 k.strip()
@@ -40,5 +38,3 @@ def run():
         crawl(graph_config, args)
 
 
-if __name__ == '__main__':
-    run()

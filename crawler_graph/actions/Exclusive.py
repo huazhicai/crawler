@@ -136,25 +136,35 @@ class Reportxpath(Action):
     def __call__(self, args, io):
         url = args['url_str']
         xpath_dict = {}
-        if '151600'in url:
+        parames_one = args['paraames_one_str']
+        parames_two = args['paraames_two_str']
+        parames_three = args['paraames_three_str']
+        parames_four = args['paraames_four_str']
+
+        # if '151600'in url:
+        if parames_one in url:
             xpath_dict = {
                 '首页':'/html/body/div[3]/div/ul/li[1]/a/text()'
             }
-        if '812' in url:
+        # if '812' in url:
+        if parames_two in url:
             xpath_dict = {
                 '药品': '/html/body/div[3]/div/ul/li[2]/a/text()'
             }
-        if '867' in url:
+        # if '867' in url:
+        if parames_three in url:
             xpath_dict = {
                 '非药品': '/html/body/div[3]/div/ul/li[3]/a/text()',
                 '美肤商场':'/html/body/div[3]/div/li/ul/li[3]/a/text()'
             }
-        if '155' in url:
+        # if '155' in url:
+        if parames_four in  url:
             xpath_dict = {
                 '男科中心': '/html/body/div[3]/div/ul/li[4]/a/text()'
             }
         io.set_output('xpath_dict', xpath_dict)
         io.push_event('Out')
+
     id = '29cf0600-f477-11e9-8b14-8cec4bd887f3'
 
 

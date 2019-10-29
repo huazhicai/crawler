@@ -22,7 +22,7 @@ class JsonLoads(Action):
     id = 'a1596ee2-e968-11e9-b900-8cec4bd887f3'
 
 
-class ParseXpath(Action):
+class ParseXapth(Action):
     """通过xpath ，获取指定字段"""
 
     def __call__(self, args, io):
