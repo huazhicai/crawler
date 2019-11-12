@@ -3,28 +3,20 @@ import sys
 import os
 import subprocess
 
-from PyQt5.QtCore import pyqtSignal, QThread
+from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-sys.path.append(os.path.dirname(__file__))
 import widgets
 from dlg import ResizeSceneDialog, SaveQuestionDialog, OverrideDialog
 import mutil
 import data
 from font import FontManager
 from version import buildDate, version
-from A_Exporter import single_file_export
-
-
-def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
+from mutil import resource_path
 
 
 class TabWidget(QTabWidget):
-    # 声明无参数的信号
     doubleClickSignal = pyqtSignal()
 
     def __init__(self):
@@ -41,7 +33,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
         # 设置控件
         self.setWindowTitle('Node Editor')
-        self.setMinimumSize(600, 400)  # 设置窗口最小尺寸,就是不能拖放比此小
+        # self.setMinimumSize(600, 400)  # 设置窗口最小尺寸,就是不能拖放比此小
         self.setAcceptDrops(True)  # 设置接受拖放事件
 
         self.prefs = data.load_prefs()  # 加载偏好设置
@@ -83,8 +75,7 @@ class MainWindow(QMainWindow):
         self.tabWidget.setTabShape(QTabWidget.Triangular)
         # 将信号tabCloseRequested连接到指定槽函数，关闭选项卡
         self.tabWidget.tabCloseRequested.connect(self.closeTab)
-        # 双击新建选项卡
-        self.tabWidget.doubleClickSignal.connect(self.addTab)
+        # self.tabWidget.doubleClickSignal.connect(self.addTab)   # 双击新建
         self.tabWidget.setStyleSheet('#pane {margin:0; padding: 0}')
 
     def closeTab(self, index):
@@ -107,7 +98,7 @@ class MainWindow(QMainWindow):
     def addTab(self, isTemplate=False):
         if not isTemplate:
             tab = widgets.GraphWidget()  # 父类标签控件对象
-            # 编辑转态改变信号，连接槽函数，更新字幕
+            # 编辑转态改变信号，连接槽函数，更新文江名字
             tab.editStateChanged.connect(self.updateTabCaption)
             # 在视图上的鼠标位置更改信号，连接槽函数，更新鼠标位置
             tab.view.mouseMoved.connect(self.updateMousePosition)
@@ -517,43 +508,7 @@ class MainWindow(QMainWindow):
         graphWidget = self.tabWidget.currentWidget()
         if not isinstance(graphWidget, widgets.GraphWidget):
             return
-        data = graphWidget.runGraph()
-        config_data = single_file_export(data)
-
-        # self.thread = CrawlThread(config_data)  # 创建线程
-        # self.thread.started.connect(lambda: print('=========== Starting Crawl =========='))
-        # self.thread.start()
-        # self.thread.finished.connect(lambda: print("============ Done ================"))
-
-        # 开启爬虫子
-        from crawler_graph.run import crawl
-        import multiprocessing
-        try:
-            process = multiprocessing.Process(target=crawl, args=(config_data,))
-            process.start()
-        except Exception as e:
-            print(f'Crawler Error: {e}')
-
-        # 开启爬虫子进程
-    #     obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'crawler.py')
-    #     obj_file = resource_path(obj_file)
-
-    #     self.process = QtCore.QProcess(self)
-    #     self.process.readyReadStandardOutput.connect(self.stdoutReady)
-    #     self.process.readyReadStandardError.connect(self.stderrReady)
-    #     start_time = datetime.now()
-    #     self.process.started.connect(lambda: print('********* Started! **********'))
-    #     self.process.finished.connect(
-    #         lambda: print('********** Finished! *** Timer: {} *********'.format(datetime.now() - start_time)))
-    #     self.process.start('python', [obj_file, str(config_data)])
-    #
-    # def stdoutReady(self):
-    #     text = str(self.process.readAllStandardOutput(), encoding='utf-8')
-    #     print(text.strip())
-    #
-    # def stderrReady(self):
-    #     text = str(self.process.readAllStandardError(), encoding='utf-8')
-    #     print(text.strip())
+        graphWidget.runGraph()
 
     def saveGraph(self):
         """
@@ -578,7 +533,7 @@ class MainWindow(QMainWindow):
         filename = QFileDialog.getSaveFileName(self,
                                                'Save Graph',
                                                saveGraphDir,
-                                               "All Files (*);;Text Files (*.txt)")
+                                               "Json Files (*.json);;All Files (*)")
         if filename:
             if type(filename) == tuple:
                 filename = str(filename[0])
@@ -762,6 +717,10 @@ class MainWindow(QMainWindow):
         graphWidget.resizeScene(width, height)
 
     def resizeScene(self):
+        graphWidget = self.tabWidget.currentWidget()
+        if not isinstance(graphWidget, widgets.GraphWidget):
+            return
+
         dlg = ResizeSceneDialog(self.sceneWidth,
                                 self.sceneHeight,
                                 self.doneResizeSceneSettings)
@@ -1062,8 +1021,9 @@ def main():
     # 窗口中心点移动到屏幕中心点
     mainWindow.move(screenRect.center() - mainWindow.rect().center())
     # 2.3 展示控件
-    mainWindow.show()
+
     mainWindow.setGeometry(100, 100, 1200, 800)  # 不小于最小尺寸setMinimize
+    mainWindow.show()
 
     # 3. 应用程序的执行，进入消息循环
     sys.exit(app.exec_())
@@ -1076,5 +1036,5 @@ def getScriptMode():
         return None
 
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

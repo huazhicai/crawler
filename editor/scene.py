@@ -1,13 +1,14 @@
-from PyQt5.QtCore import QPoint, QLine
-from PyQt5.QtGui import QFont, QTransform
-from PyQt5.QtWidgets import QGraphicsScene, QUndoStack
+import math
+from PyQt5.QtCore import QPoint, QLine, pyqtSignal, QLineF, QRectF, QSizeF, Qt, QPointF
+from PyQt5.QtGui import QFont, QTransform, QColor, QPen
 from functools import cmp_to_key
 
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsItem, QMenu, QUndoStack
 from graphics import *
 from controller import Controller, ControllerManager
 from functools import partial
 
-from editor.test.editor import Arrow
+from test.editor import Arrow
 from util import ItemType, ItemContent, editable_types
 from undo import CommandAdd, CommandDelete, CommandLink, CommandUnLink
 from clipboard import GraphisClipboard
@@ -16,6 +17,9 @@ from collections import OrderedDict
 from copy import deepcopy
 from mutil import loadJsonData, dumpJsonData
 import os
+
+from graphics import DiagramItem, DiagramItemInput, DiagramItemOutput, DiagramItemRow, CosineLine, SelectionRect, \
+    VirtualRect, CosineConnection, FreeCommentItem, ErrorRect, ConnectionBase
 
 
 class QDMGraphicsScene(QGraphicsScene):
@@ -64,13 +68,13 @@ class QDMGraphicsScene(QGraphicsScene):
         # compute all lines to be drawn
         lines_light, lines_dark = [], []
         for x in range(first_left, right, self.gridSize):
-            if (x % (self.gridSize * self.gridSquares) != 0):
+            if x % (self.gridSize * self.gridSquares) != 0:
                 lines_light.append(QLine(x, top, x, bottom))
             else:
                 lines_dark.append(QLine(x, top, x, bottom))
 
         for y in range(first_top, bottom, self.gridSize):
-            if (y % (self.gridSize * self.gridSquares) != 0):
+            if y % (self.gridSize * self.gridSquares) != 0:
                 lines_light.append(QLine(left, y, right, y))
             else:
                 lines_dark.append(QLine(left, y, right, y))
@@ -139,12 +143,13 @@ class DiagramScene(QDMGraphicsScene):
 
     def contextMenuEvent(self, event):
         transform = QTransform(1, 0, 0, 0, 1, 0, 0, 0, 1)
-        if self.itemAt(event.scenePos(), QTransform()):
+        if self.itemAt(event.scenePos(), transform):
             QGraphicsScene.contextMenuEvent(self, event)
         else:
             if not self.showDynamicMenu:
                 return
             self.menu.exec_(event.screenPos())
+        super().contextMenuEvent(event)
 
     def chooseInsertItem(self, name):
         controller = ControllerManager().getController(self.controllerKey)
@@ -370,7 +375,7 @@ class DiagramScene(QDMGraphicsScene):
                                            description='remove an arrow')
                 self.undoStack.push(delCommand)
 
-                # 在添加新边
+                # 再添加新边
                 arrow = CosineConnection(startItem, endItem)
                 if startItem.itemContent.contentType != 'Any':
                     arrow.setConnectionType(startItem.itemContent.contentType)

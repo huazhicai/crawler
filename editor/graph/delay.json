@@ -1,0 +1,66 @@
+{
+    "scene": {
+        "width": 10000.0,
+        "height": 10000.0
+    },
+    "nodes": [
+        {
+            "id": "70aeba6e-ed87-491a-9c88-5aa717a3318a",
+            "type": "86077a10-bab7-40a8-a42d-8d3390a58c0c",
+            "pos": {
+                "x": -139.0,
+                "y": -181.0
+            },
+            "deltaWidth": 0,
+            "args": {
+                "bc4eac89-2c39-43b1-ac86-02a2795a2d8f": 1.0
+            }
+        }
+    ],
+    "edges": [],
+    "comments": [],
+    "meta": [
+        {
+            "category": "Flow Control",
+            "returns": [
+                {
+                    "type": "Event",
+                    "name": [
+                        "Out",
+                        "d7da9bf5-94c7-4840-b1d2-a8b3db5d371f"
+                    ]
+                }
+            ],
+            "args": [
+                {
+                    "type": "Float",
+                    "name": [
+                        "Time",
+                        "bc4eac89-2c39-43b1-ac86-02a2795a2d8f"
+                    ],
+                    "default": 1.0
+                },
+                {
+                    "type": "Event",
+                    "name": [
+                        "In",
+                        "2d99f3cd-5d97-429e-841d-bc85a0991d59"
+                    ],
+                    "function": "delay"
+                },
+                {
+                    "type": "Event",
+                    "name": [
+                        "Reset Node",
+                        "90d52ff6-0b62-4b23-8efd-24bcc33b20b1"
+                    ],
+                    "function": "cancel_delay"
+                }
+            ],
+            "name": [
+                "Delay",
+                "86077a10-bab7-40a8-a42d-8d3390a58c0c"
+            ]
+        }
+    ]
+}

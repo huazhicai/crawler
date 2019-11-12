@@ -14,7 +14,9 @@ def compatable(defType, value):
     elif defType == 'Dict':
         return type(value) == dict
     elif defType == 'String':
-        return type(value) == str or type(value) == str
+        return type(value) == str
+    elif defType == 'List':
+        return type(value) == list
     elif defType == 'Vec3':
         if type(value) not in [str, str]:
             return False
@@ -22,7 +24,7 @@ def compatable(defType, value):
         val = Vec3.valueFromString(value)
         return val != None
     elif defType == 'Any':
-        return type(value) in [int, float, bool, str, str]
+        return type(value) in [int, float, bool, str, list, object]
     elif defType == 'Array':
         return type(value) == list
 

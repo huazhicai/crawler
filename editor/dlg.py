@@ -49,8 +49,8 @@ class ResizeSceneDialog(QDialog):
         self.doneResizeCallback(self.width, self.height)
         super(ResizeSceneDialog, self).accept()
 
-    def reject(self):
-        super(ResizeSceneDialog, self).reject()
+    # def reject(self):
+    #     super(ResizeSceneDialog, self).reject()
 
 
 class ChangeValueDialog(QDialog):

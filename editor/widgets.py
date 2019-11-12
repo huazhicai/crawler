@@ -17,6 +17,8 @@ from functools import partial
 
 
 # 共用一个导表工具
+from editor.A_Exporter import single_file_export
+
 sys.path.append(os.path.join(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir), 'csv2py'))
 from ActivityScriptExporter import editor_validate_and_export
 import logger
@@ -44,7 +46,7 @@ class GraphWidget(QWidget):
         self.scene.resetModeSignal.connect(self.modeReseted)
         self.scene.editSignal.connect(self.sceneEdited)
 
-        # 创建图形视口对象，传入图形场景作对象为参数
+        # 创建图形视口对象，传入图形场景作为对象参数
         self.view = DiagramView(self.scene)
         # self.view.setBackgroundBrush(QColor(230, 200, 167))
         # self.view.setBackgroundBrush(QColor(41, 41, 41))
@@ -111,7 +113,44 @@ class GraphWidget(QWidget):
     def runGraph(self):
         controller = ControllerManager().getController(self.controllerKey)
         data = controller.getData()
-        return data
+
+        config_data = single_file_export(data)
+        # self.thread = CrawlThread(config_data)  # 创建线程
+        # self.thread.started.connect(lambda: print('=========== Starting Crawl =========='))
+        # self.thread.start()
+        # self.thread.finished.connect(lambda: print("============ Done ================"))
+
+        # 开启爬虫子
+
+        from crawler_graph.crawler import crawl
+        import multiprocessing
+        try:
+            process = multiprocessing.Process(target=crawl, args=(config_data,))
+            process.start()
+        except Exception as e:
+            print(f'Crawler Error: {e}')
+
+        # 开启爬虫子进程
+
+        #     obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'TestOne.py')
+        #     obj_file = resource_path(obj_file)
+
+        #     self.process = QtCore.QProcess(self)
+        #     self.process.readyReadStandardOutput.connect(self.stdoutReady)
+        #     self.process.readyReadStandardError.connect(self.stderrReady)
+        #     start_time = datetime.now()
+        #     self.process.started.connect(lambda: print('********* Started! **********'))
+        #     self.process.finished.connect(
+        #         lambda: print('********** Finished! *** Timer: {} *********'.format(datetime.now() - start_time)))
+        #     self.process.start('python', [obj_file, str(config_data)])
+        #
+        # def stdoutReady(self):
+        #     text = str(self.process.readAllStandardOutput(), encoding='utf-8')
+        #     print(text.strip())
+        #
+        # def stderrReady(self):
+        #     text = str(self.process.readAllStandardError(), encoding='utf-8')
+        #     print(text.strip())
 
     def saveGraph(self, filename):
         controller = ControllerManager().getController(self.controllerKey)
@@ -559,7 +598,7 @@ class GraphWidget(QWidget):
         self.prevEdgeList = []
         self.nextEdgeList = []
 
-    def find(self):
+    def find_(self):
         print('in widget find')
         controller = ControllerManager().getController(self.controllerKey)
         if not self.nameIndex:

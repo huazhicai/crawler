@@ -105,4 +105,4 @@ class GraphRunnerInstance(object):
 
 if __name__ == '__main__':
     instance = GraphRunnerInstance()
-    # print(instance.action_manager.action_map)
+    print(instance.action_manager.action_map)

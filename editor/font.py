@@ -2,7 +2,7 @@
 import os
 
 from PyQt5.QtGui import QFontDatabase, QFont, QFontMetrics
-from editor.util import singleton
+from util import singleton
 
 
 @singleton

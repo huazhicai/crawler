@@ -15,7 +15,7 @@ options = {
     }
 }
 
-setup(windows=['crawler.py', ], options=options,
+setup(windows=['TestOne.py', ], options=options,
       data_files=[('images', glob.glob('images\\*.png')),
                   ('graph', glob.glob('graph\\*.json')),
                   ('meta', glob.glob('meta\\*.json'))])

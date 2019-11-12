@@ -1,6 +1,6 @@
 import json
 import os
-from pprint import pprint
+from mutil import loadJsonData
 
 
 class Value(object):
@@ -20,7 +20,7 @@ def validate_def_data(defData):
             except:
                 print('Duplicate UUID !!! : ', uuid)
                 raise
-            assert UUID(uuid, version=4)
+            # assert UUID(uuid, version=4)
             uuidSet.add(uuid)
 
         for ret in nodeDef['returns']:
@@ -30,7 +30,7 @@ def validate_def_data(defData):
             except:
                 print('Duplicate UUID !!! : ', uuid)
                 raise
-            assert UUID(uuid, version=4)
+            # assert UUID(uuid, version=4)
             uuidSet.add(uuid)
         uuid = nodeDef['name'][1]
 
@@ -40,7 +40,7 @@ def validate_def_data(defData):
             print('Duplicate UUID !!! : ', uuid)
             raise
 
-        assert UUID(uuid, version=4)
+        # assert UUID(uuid, version=4)
         uuidSet.add(uuid)
 
     # NOTE: query类节点不可以使用Event
@@ -308,7 +308,8 @@ def single_file_export(editorData):
     nodeDefFilepath = '/'.join([current_dir, 'meta/nodes.json'])
 
     filename = os.path.basename(nodeDefFilepath).split('.')[0]
-    defData = json.loads(open(nodeDefFilepath, 'r').read())
+    # defData = json.loads(open(nodeDefFilepath, 'r').read())
+    defData = loadJsonData('meta/nodes.json')
 
     validate_def_data(defData)
     validate_editor_data(editorData)

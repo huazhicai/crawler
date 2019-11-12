@@ -1,11 +1,8 @@
 # coding: utf-8
-
-
 import os, sys
 import json
 import logging
 import logging.handlers
-# from main import resource_path
 
 
 def resource_path(relative_path):

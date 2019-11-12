@@ -9,7 +9,8 @@ from util import interpolate_cosine_points, editable_types, ItemType, ItemConten
 from colors import ColorManager
 from dlg import ChangeValueDialog, TemplateDialog
 from font import FontManager, measureWidth
-from main import resource_path
+from mutil import resource_path
+
 
 class LineBase(QGraphicsLineItem):
     def __init__(self, line, parent=None):
@@ -142,7 +143,7 @@ class ArrowConnection(ConnectionBase):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         if self.isSelected():
-            penWidth = 2
+            penWidth = 3
         else:
             penWidth = 1
 
@@ -229,7 +230,7 @@ class CosineConnection(ConnectionBase):
             self.path = self.shape()
 
         if self.isSelected():
-            penWidth = 3
+            penWidth = 4
         else:
             penWidth = 2
 
@@ -370,7 +371,7 @@ class DiagramItem(DiagramItemBase):
                                             measureWidth('%s:%s' % (param_name[0], str(param_default))))
 
             if self.data.get('function', None) != None and \
-                    type(self.data['function']) == list:
+                    type(self.data['function']) == str:
                 for mp in self.data.get('function'):
                     eventYs.append(cY)
 
@@ -673,7 +674,7 @@ class DiagramItem(DiagramItemBase):
             pen.setStyle(Qt.SolidLine)
             pen.setWidth(1)
 
-        painter.setRenderHint(QPainter.Antialiasing, True)
+        painter.setRenderHint(QPainter.Antialiasing, True)  # 抗锯齿, 防止图形走样
 
         # head
         if lineColor is None:
@@ -866,7 +867,7 @@ class DiagramItemRow(DiagramItemBase):
 
         painter.setRenderHint(QPainter.Antialiasing, True)
 
-        penWidth = 1
+        penWidth = 10
         pen = QPen()
         pen.setColor(lineColor)
         pen.setWidth(penWidth)
@@ -874,7 +875,7 @@ class DiagramItemRow(DiagramItemBase):
 
         painter.setPen(pen)
 
-        # painter.drawRect(self.centerRect)
+        painter.drawRect(self.centerRect)
 
         leftRect = self.inputRect
         painter.setBrush(Qt.yellow)
@@ -882,9 +883,9 @@ class DiagramItemRow(DiagramItemBase):
 
         rightRect = self.outputRect
         painter.setBrush(Qt.blue)
-        painter.drawRect(rightRect)
+        # painter.drawRect(rightRect)
         painter.drawText(self.centerRect,
-                         Qt.AlignCenter,
+                         # Qt.AlignCenter,
                          self.title)
 
     def mouseDoubleClickEvent(self, event):
@@ -913,7 +914,7 @@ class DiagramItemInput(DiagramItemBase):
 
         self.itemContent = itemContent
         self.imageSourceRect = QRectF(0, 0, self.ImageWidth, self.ImageHeight)
-        self.pixmap = QPixmap(resource_path('./images/pen.png'))
+        # self.pixmap = QPixmap(resource_path('./images/pen.png'))
 
         self.editButton = None
         if self.itemContent.contentType in editable_types:
@@ -1007,10 +1008,10 @@ class DiagramItemInput(DiagramItemBase):
 
     # painter.drawRect(self.inputRect)
 
-    # if self.itemContent.contentType in editable_types:
-    # 	painter.drawPixmap(self.imageRect,
-    # 		self.pixmap,
-    # 		self.imageSourceRect)
+        # if self.itemContent.contentType in editable_types:
+        #     painter.drawPixmap(self.imageRect,
+        #         self.pixmap,
+        #         self.imageSourceRect)
 
     def contextMenuEvent(self, event):
         if self.itemContent.contentType != 'Event':
@@ -1089,7 +1090,7 @@ class DiagramItemInput(DiagramItemBase):
 
             maxWidth = measureWidth(newTitleText)
             # while maxWidth > self.TitleWidth:  # 固定大小
-                # maxWidth = 200
+            # maxWidth = 200
             #     self.parentItem().wider()
         elif mode == 'reset':
             # 将 itemContent的值 设置为原有的默认值
@@ -1436,7 +1437,7 @@ class VirtualRect(QGraphicsItem):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         pen = QPen()
-        pen.setColor(Qt.black)
+        pen.setColor(Qt.gray)
         pen.setWidth(1)
         pen.setStyle(Qt.DashLine)
         painter.setPen(pen)
@@ -1493,7 +1494,7 @@ class UnfoldButton(QGraphicsWidget):
 
         return path
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         down = option.state & QStyle.State_Sunken
@@ -1547,7 +1548,7 @@ class FoldButton():
     pressed = pyqtSignal()
 
     def __init__(self, parent=None):
-        super(FoldButton, self).__init__(param)
+        super(FoldButton, self).__init__(parament=None)
 
         self.setAcceptHoverEvents(True)
         self.setCacheMode(QGraphicsItem.DeviceCoordinateCache)

@@ -114,7 +114,7 @@ class Controller(object):
     def __init__(self, itemData):
         self.itemData = itemData
         self.orderedItemData = self.buildOrderedData(itemData)
-        self.selectedItemType = itemData[0]['name']
+        self._selectedItemType = itemData[0]['name']
         self.nodes = []
         self.edges = []
         self.comments = []

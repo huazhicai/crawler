@@ -1,4 +1,5 @@
 ﻿# coding: utf-8
+import os
 
 import math
 import csv
@@ -1250,7 +1251,6 @@ def editor_validate_and_export(defData, editorData, filename, resPath):
         unknownErrors.append(e)
 
     return result
-
 
 # if __name__ == '__main__':
 #     import sys
