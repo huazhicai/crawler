@@ -5,7 +5,7 @@ import json
 import traceback
 
 from PyQt5.Qt import Qt
-from PyQt5.QtCore import pyqtSignal, QRectF, QTimer
+from PyQt5.QtCore import pyqtSignal, QRectF, QTimer, QProcess
 from PyQt5.QtGui import QColor, QImage, QPainter
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QFileDialog, QMessageBox, QVBoxLayout, QPushButton
 
@@ -131,26 +131,26 @@ class GraphWidget(QWidget):
             print(f'Crawler Error: {e}')
 
         # 开启爬虫子进程
+        obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'TestOne.py')
+        # obj_file = resource_path(obj_file)
 
-        #     obj_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'crawler_graph', 'TestOne.py')
-        #     obj_file = resource_path(obj_file)
+        self.process = QProcess(self)
+        self.process.readyReadStandardOutput.connect(self.stdoutReady)
+        self.process.readyReadStandardError.connect(self.stderrReady)
+        # start_time = datetime.now()
+        self.process.started.connect(lambda: print('********* Started! **********'))
+        self.process.finished.connect(
+            lambda: print('********** Finished! *** Timer: {} *********'.format(datetime.now() - start_time)))
+        self.process.start('python', [obj_file, str(config_data)])
 
-        #     self.process = QtCore.QProcess(self)
-        #     self.process.readyReadStandardOutput.connect(self.stdoutReady)
-        #     self.process.readyReadStandardError.connect(self.stderrReady)
-        #     start_time = datetime.now()
-        #     self.process.started.connect(lambda: print('********* Started! **********'))
-        #     self.process.finished.connect(
-        #         lambda: print('********** Finished! *** Timer: {} *********'.format(datetime.now() - start_time)))
-        #     self.process.start('python', [obj_file, str(config_data)])
-        #
-        # def stdoutReady(self):
-        #     text = str(self.process.readAllStandardOutput(), encoding='utf-8')
-        #     print(text.strip())
-        #
-        # def stderrReady(self):
-        #     text = str(self.process.readAllStandardError(), encoding='utf-8')
-        #     print(text.strip())
+    def stdoutReady(self):
+        text = str(self.process.readAllStandardOutput(), encoding='utf-8')
+
+        print(text.strip())
+
+    def stderrReady(self):
+        text = str(self.process.readAllStandardError(), encoding='utf-8')
+        print(text.strip())
 
     def saveGraph(self, filename):
         controller = ControllerManager().getController(self.controllerKey)

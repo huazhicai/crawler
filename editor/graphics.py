@@ -1049,7 +1049,7 @@ class DiagramItemInput(DiagramItemBase):
         super(DiagramItemInput, self).mouseReleaseEvent(event)
 
     def mouseDoubleClickEvent(self, event):
-        super(DiagramItemInput, self).mouseDoubleClickEvent(event)
+        super(self.__class__, self).mouseDoubleClickEvent(event)
         if self.parentItem().mode != 'normal':
             print('pop comment template dialog', self.title)
             self.editTemplate()
@@ -1368,7 +1368,7 @@ class DiagramItemUnfold(QGraphicsItem):
     def unfoldParent(self):
         self.parentItem().unfold()
 
-    def paint(self, painter, option, widget):
+    def paint(self, painter, option, widget=None):
         painter.setRenderHint(QPainter.Antialiasing, True)
         painter.setPen(Qt.NoPen)
         painter.setBrush(self.backgroundColor)

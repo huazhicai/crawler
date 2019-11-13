@@ -134,7 +134,7 @@ class SaveQuestionDialog(QDialog):
         self.doneChoice = doneChoice
         self.index = index
 
-        label = QLabel('Do you want to save changes?')
+        label = QLabel('Do you want to save changes or cancel close?')
         discardButton = QPushButton('Discard')
         discardButton.clicked.connect(self.discardClicked)
         cancelButton = QPushButton('Cancel')
@@ -145,8 +145,8 @@ class SaveQuestionDialog(QDialog):
 
         layout = QGridLayout()
         layout.addWidget(label, 0, 0, 1, 4)
-        layout.addWidget(discardButton, 1, 0, 1, 1)
-        layout.addWidget(cancelButton, 1, 2, 1, 1)
+        layout.addWidget(cancelButton, 1, 0, 1, 1)
+        layout.addWidget(discardButton, 1, 2, 1, 1)
         layout.addWidget(saveButton, 1, 3, 1, 1)
         self.setLayout(layout)
 

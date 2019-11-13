@@ -140,11 +140,19 @@ def parseValue(contentType, text):
         value = text
         sig = True
     elif contentType == 'Dict':
-        value = eval(text)
-        sig = True
+        try:
+            value = eval(text)
+        except:
+            value = None
+        if isinstance(value, dict):
+            sig = True
     elif contentType == 'List':
-        value = eval(text)
-        sig = True
+        try:
+            value = eval(text)
+        except:
+            value = None
+        if isinstance(value, list):
+            sig = True
     elif contentType == 'Bool':
         print('branch bool')
         try:

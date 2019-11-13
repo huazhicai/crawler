@@ -314,7 +314,7 @@ class DiagramScene(QDMGraphicsScene):
         anyItemInputTypes = []
         for chItem in item.childItems():
             if isinstance(chItem, DiagramItemInput) and \
-                            chItem.itemContent.contentType == 'Any':
+                    chItem.itemContent.contentType == 'Any':
                 for arrow in chItem.arrows:
                     anyItemInputTypes.append(arrow.connectionType)
 
@@ -334,7 +334,6 @@ class DiagramScene(QDMGraphicsScene):
             return
 
         controller = ControllerManager().getController(self.controllerKey)
-
         if endItem.itemContent.contentType == 'Event':
             # Event，可以有任意多的入边
             edgeData = {
@@ -361,18 +360,19 @@ class DiagramScene(QDMGraphicsScene):
                     'startItemTypeId': startItem.itemType.typeId,
                     'endItemTypeId': endItem.itemType.typeId
                 }
-
-                command = CommandLink(self,
-                                      [deepcopy(edgeData)],
-                                      description='add a link')
+                command = CommandLink(self, [deepcopy(edgeData)], description='add a link')
                 self.undoStack.push(command)
                 self.editSignal.emit()
             else:
                 # 有连入的边，删除原来的边
                 oldArrow = endItem.arrows[0]
-                delCommand = CommandUnLink(controller,
-                                           oldArrow,
-                                           description='remove an arrow')
+                edgeData = {
+                    'start': oldArrow.startItem().parentItem().uuid,
+                    'end': oldArrow.endItem().parentItem().uuid,
+                    'startItemTypeId': oldArrow.startItem().itemType.typeId,
+                    'endItemTypeId': oldArrow.endItem().itemType.typeId
+                }
+                delCommand = CommandUnLink(self, [edgeData], description='remove an arrow')
                 self.undoStack.push(delCommand)
 
                 # 再添加新边
@@ -383,14 +383,14 @@ class DiagramScene(QDMGraphicsScene):
                 else:
                     arrow.setConnectionType(endItem.itemContent.contentType)
                     arrow.setColor(endItem.itemContentColor)
-
                 # endItem.itemContent.contentValue = None
-
-                command = CommandLink(
-                        controller,
-                        self,
-                        arrow,
-                        description='add a link')
+                edgeData = {
+                    'start': arrow.startItem().parentItem().uuid,
+                    'end': arrow.endItem().parentItem().uuid,
+                    'startItemTypeId': arrow.startItem().itemType.typeId,
+                    'endItemTypeId': arrow.endItem().itemType.typeId
+                }
+                command = CommandLink(self, [deepcopy(edgeData)], description='add a link')
                 self.undoStack.push(command)
                 self.editSignal.emit()
 
@@ -422,7 +422,6 @@ class DiagramScene(QDMGraphicsScene):
 
                 # 在添加新边
                 self.directConnection(startItem, endItem)
-
         self.editSignal.emit()
 
     def directConnection(self, startItem, endItem):
@@ -507,9 +506,7 @@ class DiagramScene(QDMGraphicsScene):
                 edgesData.append(edgeData)
 
         if len(edgesData) != 0:
-            command = CommandUnLink(self,
-                                    edgesData,
-                                    description='remove an/serveral arrows')
+            command = CommandUnLink(self, edgesData, description='remove an/several arrows')
             self.undoStack.push(command)
 
         itemDatasWithEdge = []

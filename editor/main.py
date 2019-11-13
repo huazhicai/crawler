@@ -3,7 +3,7 @@ import sys
 import os
 import subprocess
 
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QSettings, QPoint, QSize
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
@@ -47,9 +47,6 @@ class MainWindow(QMainWindow):
         self.createMenus()
         # self.createToolBar()
 
-        self.sceneWidth = 10000
-        self.sceneHeight = 10000
-
         # 布局管理器对象
         layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -63,6 +60,20 @@ class MainWindow(QMainWindow):
         # 主控件窗口居中
         self.setCentralWidget(self.main_widget)
         self.scriptsData = {}  # 脚本字典数据
+
+        self.readSettings()
+
+    def readSettings(self):
+        settings = QSettings('china', 'seven')
+        pos = settings.value('pos', QPoint(100, 100))
+        size = settings.value('size', QSize(1000, 800))
+        self.move(pos)
+        self.resize(size)
+
+    def writeSettings(self):
+        settings = QSettings('china', 'seven')
+        settings.setValue('pos', self.pos())
+        settings.setValue('size', self.size())
 
     def createTabWidget(self):
         # 新选项卡对象，新定义为了加入一个双击新建信号
@@ -710,20 +721,14 @@ class MainWindow(QMainWindow):
             widget.closeWidget()
         self.tabWidget.removeTab(index)
 
-    def doneResizeSceneSettings(self, width, height):
-        self.sceneWidth = width
-        self.sceneHeight = height
-        graphWidget = self.tabWidget.currentWidget()
-        graphWidget.resizeScene(width, height)
-
     def resizeScene(self):
         graphWidget = self.tabWidget.currentWidget()
         if not isinstance(graphWidget, widgets.GraphWidget):
             return
 
-        dlg = ResizeSceneDialog(self.sceneWidth,
-                                self.sceneHeight,
-                                self.doneResizeSceneSettings)
+        dlg = ResizeSceneDialog(graphWidget.sceneWidth,
+                                graphWidget.sceneHeight,
+                                graphWidget.resizeScene)
 
         if dlg.exec_():
             print('resize ok')
@@ -749,7 +754,7 @@ class MainWindow(QMainWindow):
         if not isinstance(graphWidget, widgets.GraphWidget):
             return
 
-        graphWidget.find()
+        graphWidget.find_()
 
     def replace(self):
         graphWidget = self.tabWidget.currentWidget()
@@ -873,10 +878,13 @@ class MainWindow(QMainWindow):
             cIndex = self.tabWidget.currentIndex()
             self.tabWidget.setTabText(cIndex, graphWidget.shortFileName())
 
-    def assureSaveTabs(self):
+    def maybeSaveTabs(self):
         """
         关闭前检查每个tab中的文件是否已经保存了
         """
+        if self.tabWidget.count() == 0:
+            return True
+
         for i in range(self.tabWidget.count()):
             graphWidget = self.tabWidget.widget(i)
 
@@ -887,14 +895,19 @@ class MainWindow(QMainWindow):
             dlg = SaveQuestionDialog(doneChoice=self.whetherToSave,
                                      index=i)
             if dlg.exec_():
-                print('save or discard')
+                # print('save or discard')
+                return True
             else:
-                print('cancel')
+                return False
+        return True
 
     def closeEvent(self, event):
-        self.assureSaveTabs()
-        self.savePrefs()
-        super(MainWindow, self).closeEvent(event)
+        if self.maybeSaveTabs():
+            self.savePrefs()
+            event.accept()
+        else:
+            event.ignore()
+        # super().closeEvent()
 
     def convertFile(self):
         openGraphDir = self.prefs.get('open_graph_dir', None)
@@ -930,14 +943,15 @@ class MainWindow(QMainWindow):
                                         QMessageBox.Ok)
 
     def exitMe(self):
-        self.assureSaveTabs()
+        self.maybeSaveTabs()
         self.savePrefs()
         sys.exit()
 
     def savePrefs(self):
         """保存偏好设置"""
-        self.prefs['scene_width'] = self.sceneWidth
-        self.prefs['scene_height'] = self.sceneHeight
+        # self.prefs['scene_width'] = self.sceneWidth
+        # self.prefs['scene_height'] = self.sceneHeight
+        self.writeSettings()
         data.save_prefs(self.prefs)
 
     def aboutMe(self):
@@ -1009,23 +1023,32 @@ class MainWindow(QMainWindow):
         graphWidget.itemUnfold()
 
 
+# def main():
+#     # 1.创建一个应用程序对象，传入参数列表
+#     app = QApplication(sys.argv)
+#     # 2. 控件的操作
+#     # 2.1 创建控件
+#     mainWindow = MainWindow()
+#     # 2.2 设置控件
+#     screenRect = app.desktop().screenGeometry()  # 屏幕几何位置、尺寸(0, 0, 1440, 900)
+#     # screenRect.center() 屏幕中心坐标（719，449）
+#     # 窗口中心点移动到屏幕中心点
+#     mainWindow.move(screenRect.center() - mainWindow.rect().center())
+#     # 2.3 展示控件
+#
+#     mainWindow.setGeometry(100, 100, 1200, 800)  # 不小于最小尺寸setMinimize
+#     mainWindow.show()
+#
+#     # 3. 应用程序的执行，进入消息循环
+#     sys.exit(app.exec_())
+
 def main():
-    # 1.创建一个应用程序对象，传入参数列表
     app = QApplication(sys.argv)
-    # 2. 控件的操作
-    # 2.1 创建控件
-    mainWindow = MainWindow()
-    # 2.2 设置控件
-    screenRect = app.desktop().screenGeometry()  # 屏幕几何位置、尺寸(0, 0, 1440, 900)
-    # screenRect.center() 屏幕中心坐标（719，449）
-    # 窗口中心点移动到屏幕中心点
-    mainWindow.move(screenRect.center() - mainWindow.rect().center())
-    # 2.3 展示控件
 
-    mainWindow.setGeometry(100, 100, 1200, 800)  # 不小于最小尺寸setMinimize
-    mainWindow.show()
+    main_wnd = MainWindow()
 
-    # 3. 应用程序的执行，进入消息循环
+    main_wnd.show()
+
     sys.exit(app.exec_())
 
 
